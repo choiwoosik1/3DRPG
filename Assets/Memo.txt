@@ -21,4 +21,21 @@
 	-> Shader는 클래스, Material은 객체에 비유할 수 있다.
 		- Shader는 어떤 방식으로 Rendering할지(화면에 그릴지) 정의하는 설계도
 		- Material은 Shader를 기반으로 설정값들을 구제화한 실제 사용 데이터
+
+	4. Texture
+		- 3D 모델의 표면에 입히는 2D 이미지 데이터
+		- Material을 통해 적용할 수 있음.
+
+	-> 3D 오브젝트의 겉 포장지
 	   
+	5. 3D 모델
+		- 3차원 공간에서 보이는 오브젝트의 형태와 외형을 정의한 데이터 집합
+		- 게임의 입체적인 대상들을 일반적으로 모델이라 부른다.
+
+	-> Mesh와 Material(Texture + Shader)이 함께 작동하여 3D 모델을 시각화함.
+
+	간단하게 표현할 경우
+	Mesh : 모양
+	Material : 표면
+	Texture : 무늬
+	Shader : Rendering 코드
