@@ -10,12 +10,19 @@ public class PlayScene : MonoBehaviour
     [Header("---- 컴포넌트 참조 ----")]
     [SerializeField] InputHandler _inputHandler;
     [SerializeField] Hero _hero;
+    [SerializeField] CameraController _cameraController;
 
     // InputHandler의 이벤트 알림을 구독해서 Hero가 움직이도록
     void Start()
     {
         // 이동 입력 이벤트 구독
         _inputHandler.OnMoveInput += OnMoveInput;
+
+        // 카메라 회전 입력 이벤트 구독
+        _inputHandler.OnCameraRotInput += _cameraController.Rotate;
+        
+        // 카메라 줌 입력 이벤트 구독
+        _inputHandler.OnCameraZoomInput += _cameraController.Zoom;
     }
 
     /// <summary>
@@ -24,14 +31,26 @@ public class PlayScene : MonoBehaviour
     /// <param name="inputVec"></param>
     public void OnMoveInput(Vector2 inputVec)
     {
+        // 카메라 앞쪽 방향
+        Vector3 camForward = Camera.main.transform.forward;
+
+        // 카메라 오른쪽 방향
+        Vector3 camRight = Camera.main.transform.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 direction = camForward * inputVec.y + camRight * inputVec.x;
+
         //Vector3 direction = Vector3.zero;
         //direction.x = inputVec.x;
         //direction.z = inputVec.y;
 
         //_hero.Move(direction);
-
-        Vector3 _inputVec = new Vector3(inputVec.x, 0, inputVec.y);
         
-        _hero.Move(_inputVec);
+        _hero.Move(direction);
     }
 }

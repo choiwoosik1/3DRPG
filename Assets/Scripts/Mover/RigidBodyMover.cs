@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TransformMover : Mover
+public class RigidBodyMover : Mover
 {
     /// <summary>
     /// 회전 속력
     /// </summary>
     [SerializeField] float _rotSpeed;
+
+    [SerializeField] Rigidbody _rigid;
+
 
     public override event Action<Vector3> OnMoved;
 
@@ -24,8 +27,7 @@ public class TransformMover : Mover
         }
 
         // 이동
-        transform.Translate(
-            direction.normalized * _moveSpeed * Time.deltaTime, Space.World);
+        _rigid.velocity = direction.normalized * _moveSpeed;
 
         // 회전
         // 1) 특정 방향을 즉시 바라보게 설정(transform.forward 활용)
