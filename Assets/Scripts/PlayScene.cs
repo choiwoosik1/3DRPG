@@ -29,7 +29,7 @@ public class PlayScene : MonoBehaviour
     /// 입력 방향을 받아 Vector3로 변환한 후 Hero에게 이동 명령을 내리는 함수
     /// </summary>
     /// <param name="inputVec"></param>
-    public void OnMoveInput(Vector2 inputVec)
+    void OnMoveInput(Vector2 inputVec)
     {
         // 카메라 앞쪽 방향
         Vector3 camForward = Camera.main.transform.forward;

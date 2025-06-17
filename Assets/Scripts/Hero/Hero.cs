@@ -10,17 +10,13 @@ public class Hero : MonoBehaviour
 {
     [Header("---- 컴포넌트 참조 ----")]
     [SerializeField] Mover _mover;
+    [SerializeField] Animator _animator;
 
-    /// <summary>
-    /// 이동 속력
-    /// </summary>
-    [SerializeField] float _moveSpeed;
+    private void Start()
+    {
+        _mover.OnMoved += OnMoved;
+    }
 
-    /// <summary>
-    /// 회전 속력 
-    /// </summary>
-    [SerializeField] float _rotSpeed;
-    
     /// <summary>
     /// 방향대로 이동시키는 함수
     /// </summary>
@@ -28,5 +24,10 @@ public class Hero : MonoBehaviour
     public void Move(Vector3 direction)
     {
         _mover.Move(direction);
+    }
+
+    void OnMoved(Vector3 velocity)
+    {
+        _animator.SetFloat(AnimatorParameters.MoveSpeed, velocity.magnitude);
     }
 }

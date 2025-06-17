@@ -4,37 +4,37 @@ using UnityEngine;
 
 public class BasicCameraController : CameraController
 {
-    [Header("---- Ä«¸Ş¶ó Æ÷Ä¿½º ----")]
-    [SerializeField] Transform _target;         // Ä«¸Ş¶ó Æ÷Ä¿½º°¡ ÃßÀûÇÒ Å¸°Ù
-    [SerializeField] Transform _cameraFocus;    // Ä«¸Ş¶ó Æ÷Ä¿½º
+    [Header("---- ì¹´ë©”ë¼ í¬ì»¤ìŠ¤ ----")]
+    [SerializeField] Transform _target;         // ì¹´ë©”ë¼ í¬ì»¤ìŠ¤ê°€ ì¶”ì í•  íƒ€ê²Ÿ
+    [SerializeField] Transform _cameraFocus;    // ì¹´ë©”ë¼ í¬ì»¤ìŠ¤
 
-    [Header("---- ÀÌµ¿ ----")]
+    [Header("---- ì´ë™ ----")]
     [SerializeField] float _followingSpeed;
 
-    [Header("---- Ä«¸Ş¶ó È¸Àü ----")]
-    [Tooltip("xÃà È¸Àü ¹Î°¨µµ")]
+    [Header("---- ì¹´ë©”ë¼ íšŒì „ ----")]
+    [Tooltip("xì¶• íšŒì „ ë¯¼ê°ë„")]
     [SerializeField] float _pitchSensitivity;
-    [Tooltip("yÃà È¸Àü ¹Î°¨µµ")]
+    [Tooltip("yì¶• íšŒì „ ë¯¼ê°ë„")]
     [SerializeField] float _yawSensitivity;
 
-    [SerializeField] float _minPitch;           // xÃà È¸Àü ÃÖ¼Ú°ª
-    [SerializeField] float _maxPitch;           // xÃà È¸Àü ÃÖ´ë°ª
+    [SerializeField] float _minPitch;           // xì¶• íšŒì „ ìµœì†Ÿê°’
+    [SerializeField] float _maxPitch;           // xì¶• íšŒì „ ìµœëŒ€ê°’
 
-    [SerializeField] float _rotRate;            // ¸ñÇ¥ È¸ÀüÀ» µû¶ó°¡´Â ºñÀ² °ª
+    [SerializeField] float _rotRate;            // ëª©í‘œ íšŒì „ì„ ë”°ë¼ê°€ëŠ” ë¹„ìœ¨ ê°’
 
-    [Header("---- Ä«¸Ş¶ó ÁÜ ----")]
-    [SerializeField] float _zoomRate;           // ÁÜ °¨µµ(ºñÀ²)
-    [SerializeField] float _minDistance;        // Ä«¸Ş¶óÀÇ Ä«¸Ş¶ó Æ÷Ä¿½º¿ÍÀÇ ÃÖ¼Ò °Å¸®
-    [SerializeField] float _maxDistance;        // Ä«¸Ş¶óÀÇ Ä«¸Ş¶ó Æ÷Ä¿½º¿ÍÀÇ ÃÖ´ë °Å¸®
+    [Header("---- ì¹´ë©”ë¼ ì¤Œ ----")]
+    [SerializeField] float _zoomRate;           // ì¤Œ ê°ë„(ë¹„ìœ¨)
+    [SerializeField] float _minDistance;        // ì¹´ë©”ë¼ì˜ ì¹´ë©”ë¼ í¬ì»¤ìŠ¤ì™€ì˜ ìµœì†Œ ê±°ë¦¬
+    [SerializeField] float _maxDistance;        // ì¹´ë©”ë¼ì˜ ì¹´ë©”ë¼ í¬ì»¤ìŠ¤ì™€ì˜ ìµœëŒ€ ê±°ë¦¬
 
-    Vector3 _focusOffset;                       // Ä«¸Ş¶ó Æ÷Ä¿½º°¡ Å¸°ÙÀ¸·ÎºÎÅÍ ¾ó¸¶¸¸Å­ ¶³¾îÁ®ÀÖ´ÂÁö
-    float _pitch;                               // Ä«¸Ş¶óÀÇ x Ãà È¸Àü °ª
-    float _yaw;                                 // Ä«¸Ş¶óÀÇ y Ãà È¸Àü °ª
-    float _distance;                            // Ä«¸Ş¶óÀÇ Ä«¸Ş¶ó Æ÷Ä¿½º¿ÍÀÇ °Å¸®
+    Vector3 _focusOffset;                       // ì¹´ë©”ë¼ í¬ì»¤ìŠ¤ê°€ íƒ€ê²Ÿìœ¼ë¡œë¶€í„° ì–¼ë§ˆë§Œí¼ ë–¨ì–´ì ¸ìˆëŠ”ì§€
+    float _pitch;                               // ì¹´ë©”ë¼ì˜ x ì¶• íšŒì „ ê°’
+    float _yaw;                                 // ì¹´ë©”ë¼ì˜ y ì¶• íšŒì „ ê°’
+    float _distance;                            // ì¹´ë©”ë¼ì˜ ì¹´ë©”ë¼ í¬ì»¤ìŠ¤ì™€ì˜ ê±°ë¦¬
 
     private void Start()
     {
-        _pitch = transform.eulerAngles.x;       // Inspector View¿¡¼­ º¸´Â °ªÀÓ. rotate¿¡ Á¢±ÙÇÏ¸é ÇØ´ç °ªÀÌ¶û ½ÇÁ¦ °ªÀÌ¶û ´Ù¸§
+        _pitch = transform.eulerAngles.x;       // Inspector Viewì—ì„œ ë³´ëŠ” ê°’ì„. rotateì— ì ‘ê·¼í•˜ë©´ í•´ë‹¹ ê°’ì´ë‘ ì‹¤ì œ ê°’ì´ë‘ ë‹¤ë¦„
         _yaw = transform.eulerAngles.y;
 
         _focusOffset = _cameraFocus.position - _target.position;
@@ -44,24 +44,24 @@ public class BasicCameraController : CameraController
 
     private void Update()
     {
-        // Ä«¸Ş¶ó Æ÷Ä¿½º(_cameraFocus)°¡ Å¸°Ù(_target)À» _focusOffset¸¸Å­ ¶³¾îÁø Ã¤·Î °è¼Ó µû¶ó´Ù´Ï°Ô ÇÏ´Â ÄÚµå
+        // ì¹´ë©”ë¼ í¬ì»¤ìŠ¤(_cameraFocus)ê°€ íƒ€ê²Ÿ(_target)ì„ _focusOffsetë§Œí¼ ë–¨ì–´ì§„ ì±„ë¡œ ê³„ì† ë”°ë¼ë‹¤ë‹ˆê²Œ í•˜ëŠ” ì½”ë“œ
         //_cameraFocus.position = _target.TransformPoint(_focusOffset);
 
-        // Ä«¸Ş¶ó Æ÷Ä¿½º°¡ Å¸°ÙÀ» ÀÏÁ¤ÇÑ ¼Ó·ÂÀ¸·Î ÃßÀûÇÏ°Ô ÇÏ´Â ¹æ½Ä
-        // Ä«¸Ş¶ó°¡ ÁÖÀÎ°ø Ä³¸¯ÅÍ¸¦ µû¶ó°¡°Ô ÇÏ±â¿¡´Â ÀûÀıÇÏÁö ¾ÊÀº ¹æ½Ä
+        // ì¹´ë©”ë¼ í¬ì»¤ìŠ¤ê°€ íƒ€ê²Ÿì„ ì¼ì •í•œ ì†ë ¥ìœ¼ë¡œ ì¶”ì í•˜ê²Œ í•˜ëŠ” ë°©ì‹
+        // ì¹´ë©”ë¼ê°€ ì£¼ì¸ê³µ ìºë¦­í„°ë¥¼ ë”°ë¼ê°€ê²Œ í•˜ê¸°ì—ëŠ” ì ì ˆí•˜ì§€ ì•Šì€ ë°©ì‹
         //_cameraFocus.position =
         //    Vector3.MoveTowards(_cameraFocus.position,
         //    _target.TransformPoint(_focusOffset),
         //    Time.deltaTime * _followingSpeed);
 
-        // MoveTowards()´Â ÀÏÁ¤ÇÑ ¼Ó·ÂÀ¸·Î ÀÌµ¿ÇÒ ¶§ È°¿ë
-        // Lerp()´Â 0 ~ 1»çÀÌÀÇ ºñÀ² -> Ã³À½¿¡´Â ºü¸£´Ù°¡ °¥¼ö·Ï ÃµÃµÈ÷ Á¢±Ù
+        // MoveTowards()ëŠ” ì¼ì •í•œ ì†ë ¥ìœ¼ë¡œ ì´ë™í•  ë•Œ í™œìš©
+        // Lerp()ëŠ” 0 ~ 1ì‚¬ì´ì˜ ë¹„ìœ¨ -> ì²˜ìŒì—ëŠ” ë¹ ë¥´ë‹¤ê°€ ê°ˆìˆ˜ë¡ ì²œì²œíˆ ì ‘ê·¼
         _cameraFocus.position = Vector3.Lerp(_cameraFocus.position,
             _target.TransformPoint(_focusOffset),
-            Time.deltaTime * _followingSpeed);          // ÁøÂ¥ ¼Ó·ÂÀº ¾Æ´Ô
+            Time.deltaTime * _followingSpeed);          // ì§„ì§œ ì†ë ¥ì€ ì•„ë‹˜
     }
 
-    // ¸ğµç Update()°¡ ³¡³­ ´ÙÀ½¿¡ ´Ê°Ô ½ÇÇàµÇ´Â Update()
+    // ëª¨ë“  Update()ê°€ ëë‚œ ë‹¤ìŒì— ëŠ¦ê²Œ ì‹¤í–‰ë˜ëŠ” Update()
     private void LateUpdate()
     {
         UpdateCameraPosition(); 
@@ -69,44 +69,44 @@ public class BasicCameraController : CameraController
 
     public override void Rotate(Vector2 rotInput)
     {
-        // xÃàÀº À§ ¾Æ·¡·Î ¿òÁ÷ÀÌ±â ¶§¹®¿¡ y¿¡ Á¢±Ù
-        // xÃà È¸Àü°ª ¼³Á¤
+        // xì¶•ì€ ìœ„ ì•„ë˜ë¡œ ì›€ì§ì´ê¸° ë•Œë¬¸ì— yì— ì ‘ê·¼
+        // xì¶• íšŒì „ê°’ ì„¤ì •
         _pitch -= rotInput.y * _pitchSensitivity;
 
-        // yÃà È¸Àü°ª ¼³Á¤
+        // yì¶• íšŒì „ê°’ ì„¤ì •
         _yaw += rotInput.x * _yawSensitivity;
 
-        // xÃà È¸Àü°ª ±¸°£ ³» °íÁ¤
+        // xì¶• íšŒì „ê°’ êµ¬ê°„ ë‚´ ê³ ì •
         _pitch = Mathf.Clamp(_pitch, _minPitch, _maxPitch); 
     }
 
     public override void Zoom(float zoomInput)
     {
-        // Ä«¸Ş¶óÀÇ °Å¸®°ª ¼³Á¤
+        // ì¹´ë©”ë¼ì˜ ê±°ë¦¬ê°’ ì„¤ì •
         _distance -= zoomInput * _zoomRate;
 
-        // Ä«¸Ş¶óÀÇ °Å¸®°ªÀ» ±¸°£ ³» °íÁ¤
+        // ì¹´ë©”ë¼ì˜ ê±°ë¦¬ê°’ì„ êµ¬ê°„ ë‚´ ê³ ì •
         _distance = Mathf.Clamp(_distance, _minDistance, _maxDistance);
     }
 
     void UpdateCameraPosition()
     {
-        // ¸ñÇ¥ È¸Àü°ª ¼³Á¤
+        // ëª©í‘œ íšŒì „ê°’ ì„¤ì •
         Quaternion targetRotation = Quaternion.Euler(_pitch, _yaw, 0);
 
-        // Ä«¸Ş¶óÀÇ È¸Àü°ª¿¡ ¸ñÇ¥ È¸Àü°ª Àû¿ë
+        // ì¹´ë©”ë¼ì˜ íšŒì „ê°’ì— ëª©í‘œ íšŒì „ê°’ ì ìš©
         //transform.rotation = targetRotation;
 
-        // Ä«¸Ş¶óÀÇ È¸Àü°ªÀ» ºÎµå·´°Ô Ã³¸®
+        // ì¹´ë©”ë¼ì˜ íšŒì „ê°’ì„ ë¶€ë“œëŸ½ê²Œ ì²˜ë¦¬
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             targetRotation,
             Time.deltaTime * _rotRate);
 
-        // Ä«¸Ş¶óÀÇ Ä«¸Ş¶ó Æ÷Ä¿½º·ÎºÎÅÍ À§Ä¡ °áÁ¤
+        // ì¹´ë©”ë¼ì˜ ì¹´ë©”ë¼ í¬ì»¤ìŠ¤ë¡œë¶€í„° ìœ„ì¹˜ ê²°ì •
         Vector3 cameraOffset = -transform.forward * _distance;
 
-        // Ä«¸Ş¶óÀÇ À§Ä¡°ª ¼³Á¤
+        // ì¹´ë©”ë¼ì˜ ìœ„ì¹˜ê°’ ì„¤ì •
         transform.position = _cameraFocus.position + cameraOffset;
-    }
+    }   
 }
