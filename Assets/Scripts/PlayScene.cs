@@ -23,6 +23,9 @@ public class PlayScene : MonoBehaviour
         
         // 카메라 줌 입력 이벤트 구독
         _inputHandler.OnCameraZoomInput += _cameraController.Zoom;
+
+        // 공격 입력 이벤트 구독
+        _inputHandler.OnAttackInput += _hero.Attack;
     }
 
     /// <summary>

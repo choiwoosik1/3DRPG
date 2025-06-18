@@ -23,4 +23,5 @@ public abstract class Mover : MonoBehaviour
     /// </summary>
     /// <param name="direction">이동할 방향</param>
     public abstract void Move(Vector3 direction);
+
 }

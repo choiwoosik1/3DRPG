@@ -18,6 +18,8 @@ public class RigidBodyMover : Mover
 
     public override event Action<Vector3> OnMoved;
 
+
+
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();

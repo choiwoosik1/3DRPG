@@ -17,6 +17,7 @@ public class Hero : MonoBehaviour
         _mover.OnMoved += OnMoved;
     }
 
+
     /// <summary>
     /// 방향대로 이동시키는 함수
     /// </summary>
@@ -29,5 +30,13 @@ public class Hero : MonoBehaviour
     void OnMoved(Vector3 velocity)
     {
         _animator.SetFloat(AnimatorParameters.MoveSpeed, velocity.magnitude);
+    }
+
+    /// <summary>
+    /// 공격 동작을 실행 시키는 함수
+    /// </summary>
+    public void Attack()
+    {
+        _animator.SetTrigger(AnimatorParameters.OnAttack);
     }
 }
