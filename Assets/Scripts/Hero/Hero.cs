@@ -11,6 +11,7 @@ public class Hero : MonoBehaviour
     [Header("---- 컴포넌트 참조 ----")]
     [SerializeField] Mover _mover;
     [SerializeField] Animator _animator;
+    [SerializeField] Jumper _jumper;
 
     private void Start()
     {
@@ -38,5 +39,13 @@ public class Hero : MonoBehaviour
     public void Attack()
     {
         _animator.SetTrigger(AnimatorParameters.OnAttack);
+    }
+
+    /// <summary>
+    /// 점프 동작을 실행시키는 함수
+    /// </summary>
+    public void Jump()
+    {
+        _jumper.Jump();
     }
 }

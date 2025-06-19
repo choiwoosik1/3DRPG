@@ -12,6 +12,7 @@ public class InputManagerHandler : InputHandler
     public override event Action<Vector2> OnCameraRotInput;
     public override event Action<float> OnCameraZoomInput;
     public override event Action OnAttackInput;
+    public override event Action OnJumpInput;
 
     Vector2 _moveInput;         // 이동 입력 벡터
     Vector2 _cameraRotInput;    // 카메라 회전 입력 벡터
@@ -36,6 +37,11 @@ public class InputManagerHandler : InputHandler
         if (Input.GetButtonDown("Fire1"))
         {
             OnAttackInput?.Invoke();
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            OnJumpInput?.Invoke();
         }
     }
 }

@@ -39,3 +39,5 @@
 	Material : 표면
 	Texture : 무늬
 	Shader : Rendering 코드
+
+	Terrain : 언덕 등 맵 만들 때 매우 유용할 듯

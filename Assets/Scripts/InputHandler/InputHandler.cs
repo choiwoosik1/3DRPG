@@ -24,5 +24,13 @@ public abstract class InputHandler : MonoBehaviour
     /// </summary>
     public abstract event Action<float> OnCameraZoomInput;
 
+    /// <summary>
+    /// 공격 입력 이벤트
+    /// </summary>
     public abstract event Action OnAttackInput;
+
+    /// <summary>
+    /// 점프 입력 이벤트
+    /// </summary>
+    public abstract event Action OnJumpInput;
 }
