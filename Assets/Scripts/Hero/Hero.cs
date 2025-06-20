@@ -16,6 +16,7 @@ public class Hero : MonoBehaviour
     private void Start()
     {
         _mover.OnMoved += OnMoved;
+        _jumper.OnStateChanged += OnJumpStateChanged;
     }
 
 
@@ -47,5 +48,21 @@ public class Hero : MonoBehaviour
     public void Jump()
     {
         _jumper.Jump();
+    }
+
+    public void OnJumpStateChanged(JumpState jumpstate)
+    {
+        switch(jumpstate)
+        {
+            case JumpState.Grounded:
+                _animator.SetTrigger(AnimatorParameters.OnLand);
+                break;
+            case JumpState.Jumping:
+                _animator.SetTrigger(AnimatorParameters.OnJump);
+                break;
+            case JumpState.Falling:
+                _animator.SetTrigger(AnimatorParameters.OnFalling);
+                break;
+        }
     }
 }

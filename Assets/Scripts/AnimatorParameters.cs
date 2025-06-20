@@ -6,4 +6,8 @@ public static class AnimatorParameters
 {
     public const string MoveSpeed = "MoveSpeed";
     public const string OnAttack = "OnAttack";
+
+    public const string OnJump = "OnJump";
+    public const string OnFalling = "OnFalling";
+    public const string OnLand = "OnLand";
 }

@@ -15,6 +15,8 @@ public class PlayScene : MonoBehaviour
     // InputHandler의 이벤트 알림을 구독해서 Hero가 움직이도록
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+
         // 이동 입력 이벤트 구독
         _inputHandler.OnMoveInput += OnMoveInput;
 
