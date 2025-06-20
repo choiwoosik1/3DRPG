@@ -13,6 +13,7 @@ public class Weapon : MonoBehaviour
         _damage = _model.Damage;
     }
 
+    // Mace에 Collider 없어서 안된 걸 수도 체크해보기
     private void OnCollisionEnter(Collision collision)
     {
         if (_targetLayerMask.Contains(collision.gameObject.layer))
