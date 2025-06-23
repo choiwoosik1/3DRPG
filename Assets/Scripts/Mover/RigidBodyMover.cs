@@ -6,11 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class RigidBodyMover : Mover
 {
-    /// <summary>
-    /// 회전 속력
-    /// </summary>
-    [SerializeField] float _rotSpeed;   // 회전 속력
-
     Rigidbody _rigid;               // 리지드바디 참조
     Vector3 _velocity;              // 이동 속도 벡터
     Quaternion _targetRotation;     // 현재 목표 회전값

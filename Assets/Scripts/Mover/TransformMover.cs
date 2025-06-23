@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class TransformMover : Mover
 {
-    /// <summary>
-    /// 회전 속력
-    /// </summary>
-    [SerializeField] float _rotSpeed;
-
     public override event Action<Vector3> OnMoved;
 
     public override void Move(Vector3 direction)

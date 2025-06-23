@@ -12,11 +12,27 @@ public class Hero : MonoBehaviour
     [SerializeField] Mover _mover;
     [SerializeField] Animator _animator;
     [SerializeField] Jumper _jumper;
+    [SerializeField] HeroModel _model;
+    [SerializeField] CharacterAnimatorHandler _animatorHandler;
+    [SerializeField] DamageableDetector _damageableDetector;
 
     private void Start()
     {
+        // 이동 이벤트 구독
         _mover.OnMoved += OnMoved;
+
+        // 점프 상태 변경 이벤트 구독
         _jumper.OnStateChanged += OnJumpStateChanged;
+
+        // 공격 판정 이벤트 구독
+        //_animatorHandler.OnAttacked += _damageableDetector.DetectDamageable;
+        _animatorHandler.OnAttacked += OnAttaked;
+
+        // IDamageaable 감지 이벤트 구독
+        //_damageableDetector.OnDetected += _model.Hit;
+        _damageableDetector.OnDetected += Hit;
+
+        
     }
 
 
@@ -40,6 +56,25 @@ public class Hero : MonoBehaviour
     public void Attack()
     {
         _animator.SetTrigger(AnimatorParameters.OnAttack);
+    }
+
+    /// <summary>
+    /// 공격 판정 시 자동으로 실행되는 함수
+    /// </summary>
+    void OnAttaked()
+    {
+        Debug.Log("공격 판정 시도...");
+        _damageableDetector.DetectDamageable();
+    }
+
+    /// <summary>
+    /// 감지된 IDemageable에 데미지를 입히는 함수
+    /// IDamageable이 감지되었을 때 자동으로 실행되는 함수
+    /// </summary>
+    /// <param name="damageable"></param>
+    void Hit(IDamageable damageable)
+    {
+        _model.Hit(damageable);
     }
 
     /// <summary>

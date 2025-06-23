@@ -8,10 +8,17 @@ using UnityEngine;
 /// </summary>
 public abstract class Mover : MonoBehaviour
 {
+    [SerializeField] HeroModel _model;
+
     /// <summary>
     /// 이동 속력
     /// </summary>
     [SerializeField] protected float _moveSpeed;
+
+    /// <summary>
+    /// 회전 속력
+    /// </summary>
+    [SerializeField] protected float _rotSpeed;
 
     /// <summary>
     /// 이동 이벤트

@@ -9,13 +9,20 @@ using UnityEngine;
 /// </summary>
 public class CombatCharacterModel : MonoBehaviour, IDamageable, IAttackable
 {
+    [Header("---- 이동 ----")]
+    [SerializeField] float _moveSpeed;      // 이동 속력
+    [SerializeField] float _rotSpeed;       // 회전 속력
+
+    [Header("---- 피격 ----")]
     [SerializeField] float _maxHp;          // 최대 체력
     [SerializeField] float _currentHp;      // 현재 체력
     [SerializeField] float _armor;          // 방어력
 
+    [Header("---- 공격 ----")]
     [SerializeField] float _damage;         // 공격력
 
-    public float Damage => _damage;
+    public float MoveSpeed => _moveSpeed;
+    public float RotSpeed => _rotSpeed;
 
     public event Action<float, float> OnHpChanged;
     public event Action OnDead;
