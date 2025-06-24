@@ -31,6 +31,9 @@ public class PlayScene : MonoBehaviour
 
         // 점프 입력 이벤트 구독
         _inputHandler.OnJumpInput += _hero.Jump;
+
+        // 질주 입력 이벤트 구독
+        _inputHandler.OnSprintInput += _hero.SetSprintActive;
     }
 
     /// <summary>

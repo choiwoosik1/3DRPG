@@ -31,4 +31,14 @@ public abstract class Mover : MonoBehaviour
     /// <param name="direction">이동할 방향</param>
     public abstract void Move(Vector3 direction);
 
+    public void SetMoveSpeed(float moveSpeed)
+    {
+        _moveSpeed = moveSpeed;
+    }
+
+    public void SetRotSpeed(float rotSpeed)
+    {
+        _rotSpeed = rotSpeed;
+
+    }
 }

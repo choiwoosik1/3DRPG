@@ -8,17 +8,8 @@ using UnityEngine;
 /// </summary>
 public class HeroModel : CombatCharacterModel
 {
-    [SerializeField] float _moveSpeed;
-    [SerializeField] float _rotSpeed;
-    [SerializeField] CombatCharacterModel _characterModel;
+    [Header("---- 질주 ----")]
+    [SerializeField] float _sprintRate;         // 질주 시 속력이 얼마나 빨라지는지 비율
 
-    public void SetMoveSpeed()
-    {
-        _moveSpeed = _characterModel.MoveSpeed;
-    }
-
-    public void SetRotSpeed()
-    {
-        _rotSpeed = _characterModel.RotSpeed;
-    }
+    public float SprintRate => _sprintRate;
 }

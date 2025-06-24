@@ -18,6 +18,10 @@ public class Hero : MonoBehaviour
 
     private void Start()
     {
+        // Mover 초기화
+        _mover.SetMoveSpeed(_model.MoveSpeed);
+        _mover.SetRotSpeed(_model.RotSpeed);
+
         // 이동 이벤트 구독
         _mover.OnMoved += OnMoved;
 
@@ -99,5 +103,20 @@ public class Hero : MonoBehaviour
                 _animator.SetTrigger(AnimatorParameters.OnFalling);
                 break;
         }
+    }
+
+    /// <summary>
+    /// 질주를 On/Off 하는 함수
+    /// </summary>
+    /// <param name="isActive">질주 활성화 여부</param>
+    public void SetSprintActive(bool isActive)
+    {
+        float moveSpeed = _model.MoveSpeed;
+
+        if(isActive == true)
+        {
+            moveSpeed *= _model.SprintRate;
+        }
+        _mover.SetMoveSpeed(moveSpeed);
     }
 }

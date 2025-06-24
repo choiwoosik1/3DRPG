@@ -33,4 +33,6 @@ public abstract class InputHandler : MonoBehaviour
     /// 점프 입력 이벤트
     /// </summary>
     public abstract event Action OnJumpInput;
+
+    public abstract event Action<bool> OnSprintInput;
 }
