@@ -4834,6 +4834,10 @@ MonoBehaviour:
   _model: {fileID: 664926660}
   _navAgent: {fileID: 664926663}
   _target: {fileID: 281495835}
+  _thinkSpan: 0.5
+  _roamSpan: 3
+  _roamDistance: 5
+  _traceDistance: 30
 --- !u!4 &664926662
 Transform:
   m_ObjectHideFlags: 0

@@ -1,10 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 /// <summary>
 /// 적 캐릭터를 담당하는 클래스
+/// 동작(행동) - 정지, 배회, 추적, 공격
+/// 상태 
+///     - 방치(Idle): 주기적으로 배회 동작 수행
+///     - 추적(Trace): 주기적으로 추적 동작 수행
+///     - 전투(Combat): 주기적으로 공격 동작 수행
 /// </summary>
 public class Enemy : MonoBehaviour
 {
@@ -13,26 +20,123 @@ public class Enemy : MonoBehaviour
     [SerializeField] NavMeshAgent _navAgent;
     [SerializeField] Transform _target;
 
+    [Header("---- AI ----")]
+    [SerializeField] float _thinkSpan;          // AI 판단 간격
+    [SerializeField] float _roamDistance;       // 배회 거리
+    [SerializeField] float _roamSpan;           // 배회 간격(초)
+    [SerializeField] float _traceDistance;      // 추적 거리
+    [SerializeField] float _attackDistance;     // 공격 거리
+    [SerializeField] float _attackSpan;         // 공격 간격(초)
+
+    /// <summary>
+    /// 적 캐릭터 상태 객체들
+    /// </summary>
+    EnemyState[] _states = new EnemyState[(int)EnemyStateType.Count];
+
+    /// <summary>
+    /// 현재 상태
+    /// </summary>
+    EnemyState _currentState;
+
+
+    public float ThinkSpan => _thinkSpan;
+    public float RoamSpan => _roamSpan;
+    public float AttackSpan => _attackSpan;
+
+
     private void Start()
     {
+        _states[(int)EnemyStateType.Idle] = new IdleState(this);
+        _states[(int)EnemyStateType.Trace] = new TraceState(this);
+        _states[(int)EnemyStateType.Combat] = new IdleState(this);
+
+        _currentState = _states[(int)EnemyStateType.Idle];
+
         _model.OnDead += OnDead;
+
+        StartCoroutine(CalculateStateRoutine());
     }
 
     private void Update()
     {
-        float distance = (_target.transform.position - transform.position).magnitude;
+        _currentState.Update();
+    }
 
-
-        if(distance > 20.0f)
+    IEnumerator CalculateStateRoutine()
+    {
+        while (true)
         {
-            Stop();
+            yield return new WaitForSeconds(_thinkSpan);
+            CalculateState();
+        }
+    }
+
+    public void CalculateState()
+    {
+        float distance = Vector3.Distance(transform.position, _target.position);
+        if(distance > _traceDistance)
+        {
+            ChangeState(EnemyStateType.Idle);
+        }
+
+        else if (distance > _attackDistance)
+        {
+            ChangeState(EnemyStateType.Trace);
         }
 
         else
         {
-            FollowTarget();
+            ChangeState(EnemyStateType.Combat);
         }
+    }
 
+    void ChangeState(EnemyStateType stateType)
+    {
+        // 기존 상태가 새로 바꾸려는 상태와 동일하면 return
+        if (_currentState.StateType == stateType) return;
+
+        // 없는 상태로 바꾸려는 경우 return
+        int stateIndex = (int)stateType;
+        if(stateIndex < 0 || stateIndex >= _states.Length) return;
+
+        // 기존 상태 종료
+        _currentState.Exit();
+        
+        // 새 상태 적용
+        _currentState = _states[stateIndex];
+
+        // 새 상태 실행
+        _currentState.Enter();
+
+        Debug.Log(stateType.ToString());
+    }
+
+
+    /// <summary>
+    /// 배회 동작을 실행하는 함수
+    /// </summary>
+    public void Roam()
+    {
+        // 랜덤한 x, y방향 벡터 생성
+        Vector2 offset = Random.insideUnitCircle * _roamDistance;
+
+        // 현재 위치 기준으로 랜덤 방향의 목표 지점 설정
+        Vector3 targetPos = transform.position;
+        targetPos.x += offset.x;
+        targetPos.z += offset.y;
+
+        // 설정된 목표 지점을 NavMeshAgent의 목표지로 설정
+        _navAgent.SetDestination(targetPos);
+    }
+
+    /// <summary>
+    /// 타겟을 목적지로 설정하는 함수
+    /// (NavMeshAgent를 사용해서 자동으로 이동)
+    /// </summary>
+    public void FollowTarget()
+    {
+        // NavMeshAgent에 목적지를 설정하는 함수
+        _navAgent.SetDestination(_target.position);
     }
 
     /// <summary>
@@ -48,13 +152,11 @@ public class Enemy : MonoBehaviour
     }
 
     /// <summary>
-    /// 타겟을 목적지로 설정하는 함수
-    /// (NavMeshAgent를 사용해서 자동으로 이동)
+    /// 공격 동작을 실행하는 함수
     /// </summary>
-    public void FollowTarget()
+    public void Attack()
     {
-        // NavMeshAgent에 목적지를 설정하는 함수
-        _navAgent.SetDestination(_target.position);
+        Debug.Log("공격 실행");
     }
 
     void OnDead()
@@ -62,8 +164,73 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    //IEnumerator RomingRoutine()
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _traceDistance);
+    }
+
+
+    //private void Update()
     //{
-    //    while()
+    //    float distance = Vector3.Distance(transform.position, _target.position);
+    //    if (distance < _traceDistance)
+    //    {
+    //        // 배회 루틴이 켜져 있으면
+    //        if (_roamRoutine != null)
+    //        {
+    //            StopCoroutine(_roamRoutine);
+    //        }
+
+    //        // 추적 루틴이 꺼져 있으면
+    //        if (_traceRoutine == null)
+    //        {
+    //            _traceRoutine = StartCoroutine(TraceRoutine());
+    //        }
+    //    }
+
+    //    else
+    //    {
+    //        // 추적 루틴이 켜져 있으면
+    //        if (_traceRoutine != null)
+    //        {
+    //            StopCoroutine(_traceRoutine);
+    //        }
+
+    //        // 배회 루틴이 꺼져 있으면
+    //        if (_roamRoutine == null)
+    //        {
+    //            _roamRoutine = StartCoroutine(RoamRoutine());
+    //        }
+    //    }
+    //}
+
+    //IEnumerator RoamRoutine()
+    //{
+    //    while (true)
+    //    {
+    //        // 배회 간격 만큼 대기
+    //        yield return new WaitForSeconds(_roamSpan);
+
+    //        // 랜덤한 x, y방향 벡터 생성
+    //        Vector2 offset = Random.insideUnitCircle * _roamDistance;
+
+    //        // 현재 위치 기준으로 랜덤 방향의 목표 지점 설정
+    //        Vector3 targetPos = transform.position;
+    //        targetPos.x += offset.x;
+    //        targetPos.z += offset.y;
+
+    //        // 설정된 목표 지점을 NavMeshAgent의 목표지로 설정
+    //        _navAgent.SetDestination(targetPos);
+    //    }
+    //}
+
+    //IEnumerator TraceRoutine()
+    //{
+    //    while (true)
+    //    {
+    //        FollowTarget();
+    //        yield return new WaitForSeconds(_thinkSpan);
+    //    }
     //}
 }
