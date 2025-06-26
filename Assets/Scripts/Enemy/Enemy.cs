@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
+// _navAgent.velocity => NavMeshAgent로 움직이고 있는 현재 속도
+
 /// <summary>
 /// 적 캐릭터를 담당하는 클래스
-/// 동작(행동) - 정지, 배회, 추적, 공격
+/// 동작(행동) - 정지, 배회, 타겟 추적, 공격, 타겟을 향해 회전
 /// 상태 
 ///     - 방치(Idle): 주기적으로 배회 동작 수행
 ///     - 추적(Trace): 주기적으로 추적 동작 수행
@@ -28,6 +30,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] float _attackDistance;     // 공격 거리
     [SerializeField] float _attackSpan;         // 공격 간격(초)
 
+    [SerializeField] Animator _anim;
+
     /// <summary>
     /// 적 캐릭터 상태 객체들
     /// </summary>
@@ -46,9 +50,12 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        _navAgent.speed = _model.MoveSpeed;
+        _navAgent.angularSpeed = _model.RotSpeed;
+
         _states[(int)EnemyStateType.Idle] = new IdleState(this);
         _states[(int)EnemyStateType.Trace] = new TraceState(this);
-        _states[(int)EnemyStateType.Combat] = new IdleState(this);
+        _states[(int)EnemyStateType.Combat] = new CombatState(this);
 
         _currentState = _states[(int)EnemyStateType.Idle];
 
@@ -127,6 +134,8 @@ public class Enemy : MonoBehaviour
 
         // 설정된 목표 지점을 NavMeshAgent의 목표지로 설정
         _navAgent.SetDestination(targetPos);
+
+        _anim.SetFloat(AnimatorParameters.MoveSpeed, _navAgent.velocity.magnitude);
     }
 
     /// <summary>
@@ -137,6 +146,8 @@ public class Enemy : MonoBehaviour
     {
         // NavMeshAgent에 목적지를 설정하는 함수
         _navAgent.SetDestination(_target.position);
+
+        _anim.SetFloat(AnimatorParameters.MoveSpeed, _navAgent.velocity.magnitude);
     }
 
     /// <summary>
@@ -157,6 +168,29 @@ public class Enemy : MonoBehaviour
     public void Attack()
     {
         Debug.Log("공격 실행");
+        _anim.SetTrigger(AnimatorParameters.OnAttack);
+    }
+
+    /// <summary>
+    /// 타겟을 향해 회전하는 함수
+    /// </summary>
+    public void RotateTowardTraget()
+    {
+        // 바라봐야 하는 방향
+        Vector3 direction = _target.position - transform.position;
+        direction.y = 0;
+
+        if (direction == Vector3.zero) return;
+
+        // 목표 회전값 설정
+        Quaternion targetRotation =
+            Quaternion.LookRotation(direction, Vector3.up);
+
+        // 회전 적용
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            targetRotation,
+            _model.RotSpeed * Time.deltaTime);
     }
 
     void OnDead()

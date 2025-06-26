@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 상대 패턴(State Pattern) 
+// 상태 패턴(State Pattern) 
 // 어떤 객체가 상태에 따라 다르게 행동할 때
 // 각 상태를 객체화하여 필요에 따라 다르게 행동하도록 위임하는 디자인 패턴
 // -> 행동들은 본래 클래스에 함수로 정의
@@ -79,7 +79,6 @@ public class IdleState : EnemyState
     public override void Exit()
     {
         _enemy.Stop();
-        Debug.Log("배회 상태 종료");
     }
 
     public override void Update()
@@ -124,6 +123,10 @@ public class TraceState : EnemyState
     }
 }
 
+/// <summary>
+/// 적이 주인공 캐릭터를 공격할 수 있는 전투 상태
+/// 공격 간격 기준으로 주기적으로 공격 시도
+/// </summary>
 public class CombatState : EnemyState
 {
     float _timer;
@@ -136,7 +139,7 @@ public class CombatState : EnemyState
 
     public override void Enter()
     {
-        _enemy.Attack();
+        _timer = 0;
     }
 
     public override void Exit()
@@ -146,6 +149,7 @@ public class CombatState : EnemyState
 
     public override void Update()
     {
+        _enemy.RotateTowardTraget();
         _timer += Time.deltaTime;
         if(_timer > _enemy.AttackSpan)
         {
