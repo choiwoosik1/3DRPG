@@ -15,9 +15,13 @@ public class Hero : MonoBehaviour
     [SerializeField] HeroModel _model;
     [SerializeField] CharacterAnimatorHandler _animatorHandler;
     [SerializeField] DamageableDetector _damageableDetector;
+    [SerializeField] HeroStatusView _statusView;
 
     private void Start()
     {
+        // 임시
+        _statusView.SetHeroNameText(GameManager.Instance.HeroName);
+
         // Mover 초기화
         _mover.SetMoveSpeed(_model.MoveSpeed);
         _mover.SetRotSpeed(_model.RotSpeed);
@@ -36,7 +40,8 @@ public class Hero : MonoBehaviour
         //_damageableDetector.OnDetected += _model.Hit;
         _damageableDetector.OnDetected += Hit;
 
-        
+        // 체력 변경 이벤트 구독
+        _model.OnHpChanged += _statusView.SetHpBar;
     }
 
 

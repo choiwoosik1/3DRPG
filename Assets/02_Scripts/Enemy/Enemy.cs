@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] Animator _animator;
     [SerializeField] DamageableDetector _damageableDetector;
     [SerializeField] CharacterAnimatorHandler _characterAnimatorHandler;
+    [SerializeField] EnemyHud _hud;
 
     [Header("---- AI ----")]
     [SerializeField] float _thinkSpan;          // AI 판단 간격
@@ -80,6 +81,9 @@ public class Enemy : MonoBehaviour
 
         // IDamageable 감지 이벤트 구독
         _damageableDetector.OnDetected += Hit;
+
+        // 체력 변경 이벤트 구독
+        _model.OnHpChanged += _hud.SetHPBar;
 
         StartCoroutine(CalculateStateRoutine());
     }
