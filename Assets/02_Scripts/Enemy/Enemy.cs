@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -17,10 +18,12 @@ using UnityEngine.AI;
 /// </summary>
 public class Enemy : MonoBehaviour
 {
+    [Header("---- 타겟 ----")]
+    [SerializeField] Transform _target;
+
     [Header("---- 컴포넌트 참조 ----")]
     [SerializeField] CombatCharacterModel _model;
     [SerializeField] NavMeshAgent _navAgent;
-    [SerializeField] Transform _target;
     [SerializeField] Animator _animator;
     [SerializeField] DamageableDetector _damageableDetector;
     [SerializeField] CharacterAnimatorHandler _characterAnimatorHandler;
@@ -35,6 +38,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] float _attackSpan;         // 공격 간격(초)
     [SerializeField] float _rotAngleThreshold;  // 회전 각도 임계값
 
+    /// <summary>
+    /// 적 제거 이벤트 변수
+    /// </summary>
+    public event Action<Enemy> OnRemoved;
 
     /// <summary>
     /// 적 캐릭터 상태 객체들
@@ -61,6 +68,14 @@ public class Enemy : MonoBehaviour
     public float RoamSpan => _roamSpan;
     public float AttackSpan => _attackSpan;
 
+    /// <summary>
+    /// Enemy 컴포넌트를 초기화하는 함수
+    /// </summary>
+    /// <param name="target">추적할 target Transform</param>
+    public void Initialize(Transform target)
+    {
+        _target = target;
+    }
 
     private void Start()
     {
@@ -70,6 +85,7 @@ public class Enemy : MonoBehaviour
         _states[(int)EnemyStateType.Idle] = new IdleState(this);
         _states[(int)EnemyStateType.Trace] = new TraceState(this);
         _states[(int)EnemyStateType.Combat] = new CombatState(this);
+        _states[(int)EnemyStateType.Dead] = new DeadState(this);
 
         _currentState = _states[(int)EnemyStateType.Idle];
 
@@ -126,6 +142,7 @@ public class Enemy : MonoBehaviour
             ChangeState(EnemyStateType.Trace);
         }
 
+
         else
         {
             ChangeState(EnemyStateType.Combat);
@@ -161,7 +178,7 @@ public class Enemy : MonoBehaviour
     public void Roam()
     {
         // 랜덤한 x, y방향 벡터 생성
-        Vector2 offset = Random.insideUnitCircle * _roamDistance;
+        Vector2 offset = UnityEngine.Random.insideUnitCircle * _roamDistance;
 
         // 현재 위치 기준으로 랜덤 방향의 목표 지점 설정
         Vector3 targetPos = transform.position;
@@ -255,6 +272,8 @@ public class Enemy : MonoBehaviour
 
     void OnDead()
     {
+        OnRemoved?.Invoke(this);
+        OnRemoved = null;           // 제거 이벤트 전체 구독 해지
         Destroy(gameObject);
     }
 

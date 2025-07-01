@@ -20,7 +20,7 @@ public class Hero : MonoBehaviour
     private void Start()
     {
         // 임시
-        _statusView.SetHeroNameText(GameManager.Instance.HeroName);
+        _statusView.SetHeroNameText(GameManager.Instance.HeroData.HeroName);
 
         // Mover 초기화
         _mover.SetMoveSpeed(_model.MoveSpeed);

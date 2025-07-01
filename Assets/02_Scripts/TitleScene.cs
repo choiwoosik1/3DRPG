@@ -7,7 +7,7 @@ public class TitleScene : MonoBehaviour
 {
     public void SetHeroName(string heroName)
     {
-        GameManager.Instance.SetHeroName(heroName);
+        GameManager.Instance.HeroData.SetHeroName(heroName);
     }
 
     public void LoadPlayScene()

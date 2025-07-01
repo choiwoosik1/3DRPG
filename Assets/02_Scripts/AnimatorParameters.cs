@@ -10,4 +10,5 @@ public static class AnimatorParameters
     public const string OnJump = "OnJump";
     public const string OnFalling = "OnFalling";
     public const string OnLand = "OnLand";
+    public const string OnDead = "OnDead";
 }

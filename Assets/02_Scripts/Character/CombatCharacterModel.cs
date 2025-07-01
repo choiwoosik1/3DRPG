@@ -24,6 +24,8 @@ public class CombatCharacterModel : MonoBehaviour, IDamageable, IAttackable
     public float MoveSpeed => _moveSpeed;
     public float RotSpeed => _rotSpeed;
 
+    public float CurrentHp => _currentHp;
+
     public event Action<float, float> OnHpChanged;
     public event Action OnDead;
 

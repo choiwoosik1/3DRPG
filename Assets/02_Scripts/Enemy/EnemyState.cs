@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 // 상태 패턴(State Pattern) 
@@ -17,6 +18,7 @@ public enum EnemyStateType
     Trace,      // 추적 상태
     Combat,     // 전투 상태
     Count,      // 상태 종료 수 카운트 용
+    Dead        // 죽은 상태
 }
 
 /// <summary>
@@ -24,6 +26,7 @@ public enum EnemyStateType
 /// </summary>
 public abstract class EnemyState
 {
+    [SerializeField] protected Animator _anim;
     protected Enemy _enemy;
 
     /// <summary>
@@ -157,5 +160,30 @@ public class CombatState : EnemyState
             _timer = 0;
             _enemy.Attack();
         }
+    }
+}
+
+public class DeadState : EnemyState
+{
+    public DeadState(Enemy enemy) : base(enemy)
+    {
+    }
+
+    public override EnemyStateType StateType => EnemyStateType.Dead;
+
+    public override void Enter()
+    {
+        _anim.SetTrigger(AnimatorParameters.OnDead);
+        
+    }
+
+    public override void Exit()
+    {
+        
+    }
+
+    public override void Update()
+    {
+        
     }
 }
