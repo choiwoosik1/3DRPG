@@ -292,11 +292,12 @@ public class Enemy : MonoBehaviour
         // 콜라이더 충돌 해제
         _collider.enabled = false;
 
-        // NavMeshAgent Off
-        _navAgent.enabled = false;
-
         // 사망 상태로 변경
         ChangeState(EnemyStateType.Dead);
+
+
+        // NavMeshAgent Off
+        _navAgent.enabled = false;
     }
 
     /// <summary>

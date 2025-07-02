@@ -26,6 +26,11 @@ public class DamageableDetector : MonoBehaviour
     /// <returns></returns>
     public void DetectDamageable()
     {
+        for(int i =0; i < _colliders.Length; i++)
+        {
+            _colliders[i] = null;
+        }
+
         // _detectPoint.position을 중심으로
         // _radius 반지름의 구를 그리고
         // 그것과 겹치는 _targetLayerMask의 Collider들을
