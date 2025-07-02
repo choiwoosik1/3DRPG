@@ -44,12 +44,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6846326394040301704}
     - target: {fileID: 1382533676095799275, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
+      propertyPath: _collider
+      value: 
+      objectReference: {fileID: 6552555147320072272}
+    - target: {fileID: 1382533676095799275, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
+      propertyPath: _deadDutarion
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1382533676095799275, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
       propertyPath: _characterAnimatorHandler
       value: 
       objectReference: {fileID: 903092850061128227}
     - target: {fileID: 2052320239221131108, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
       propertyPath: m_Name
-      value: Enemy_Wolf
+      value: Wolf
       objectReference: {fileID: 0}
     - target: {fileID: 4786777903489313189, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
       propertyPath: _detectPoint

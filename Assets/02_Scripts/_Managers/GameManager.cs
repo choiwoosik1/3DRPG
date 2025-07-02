@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] HeroData _heroData = new HeroData();
     public HeroData HeroData => _heroData;
 
+    [SerializeField] ResourcesManager _resourcesManager;
+    public ResourcesManager ResourcesManager => _resourcesManager;
+
     /// <summary>
     /// GameManager의 싱글톤 객체(인스턴스)
     /// 필요 시 Scene에 GameObject를 자동으로 새로 생성하고
@@ -59,6 +62,15 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
+        }
+
+        _resourcesManager = GetComponent<ResourcesManager>();
+        
+        // ResourcesManager가 게임 오브젝트에 없으면 새로 컴포넌트에 추가
+        if( _resourcesManager == null )
+        {
+            _resourcesManager = gameObject.AddComponent<ResourcesManager>();
         }
     }
 }

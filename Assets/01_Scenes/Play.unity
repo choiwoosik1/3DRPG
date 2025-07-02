@@ -3472,7 +3472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _detectPoint: {fileID: 896403442}
-  _radius: 0.3
+  _radius: 0.5
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -12745,9 +12745,17 @@ PrefabInstance:
       propertyPath: _target
       value: 
       objectReference: {fileID: 281495835}
+    - target: {fileID: 1382533676095799275, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
+      propertyPath: _deadDutarion
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2052320239221131108, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
       propertyPath: m_Name
       value: Enemy_Zombie
+      objectReference: {fileID: 0}
+    - target: {fileID: 2052320239221131108, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6534764724085715853, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15701,7 +15709,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 437ccca0d676451429e96ef19720560f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 1382533676095799275, guid: 65a438703105f7647b2c0dd59e49173a, type: 3}
+  _enemyPrefab: {fileID: 0}
+  _enemyPrefabPath: Enemy/Zombie
   _maxSpawnCount: 10
   _hero: {fileID: 281495836}
   _spawnRadius: 90
@@ -19442,17 +19451,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Wolf
       objectReference: {fileID: 0}
-    - target: {fileID: 1207408460445653501, guid: eb64f348c47045e47ada759012b3745b, type: 3}
-      propertyPath: m_FillAmount
-      value: 0
+    - target: {fileID: 1172718918534949512, guid: eb64f348c47045e47ada759012b3745b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2239033157700375047, guid: eb64f348c47045e47ada759012b3745b, type: 3}
       propertyPath: _target
       value: 
       objectReference: {fileID: 281495835}
-    - target: {fileID: 5192480638137085543, guid: eb64f348c47045e47ada759012b3745b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
+    - target: {fileID: 2239033157700375047, guid: eb64f348c47045e47ada759012b3745b, type: 3}
+      propertyPath: _deadDutarion
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6236709375757049441, guid: eb64f348c47045e47ada759012b3745b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19492,10 +19501,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6236709375757049441, guid: eb64f348c47045e47ada759012b3745b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8983016883486474731, guid: eb64f348c47045e47ada759012b3745b, type: 3}
-      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -19645,7 +19650,7 @@ SceneRoots:
   - {fileID: 886464774}
   - {fileID: 1653950597}
   - {fileID: 2145538695}
-  - {fileID: 1988462912}
   - {fileID: 1352228070}
   - {fileID: 1961082155}
   - {fileID: 1659351949}
+  - {fileID: 1988462912}

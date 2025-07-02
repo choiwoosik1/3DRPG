@@ -17,8 +17,9 @@ public enum EnemyStateType
     Idle,       // 방치 상태
     Trace,      // 추적 상태
     Combat,     // 전투 상태
+    Dead,        // 죽은 상태
     Count,      // 상태 종료 수 카운트 용
-    Dead        // 죽은 상태
+
 }
 
 /// <summary>
@@ -26,7 +27,6 @@ public enum EnemyStateType
 /// </summary>
 public abstract class EnemyState
 {
-    [SerializeField] protected Animator _anim;
     protected Enemy _enemy;
 
     /// <summary>
@@ -165,6 +165,7 @@ public class CombatState : EnemyState
 
 public class DeadState : EnemyState
 {
+    float _timer;
     public DeadState(Enemy enemy) : base(enemy)
     {
     }
@@ -173,8 +174,7 @@ public class DeadState : EnemyState
 
     public override void Enter()
     {
-        _anim.SetTrigger(AnimatorParameters.OnDead);
-        
+        _enemy.Stop();
     }
 
     public override void Exit()
@@ -184,6 +184,11 @@ public class DeadState : EnemyState
 
     public override void Update()
     {
-        
+        _timer += Time.deltaTime;
+        if(_timer > _enemy.DeadDuration)
+        {
+            _timer = 0;
+            _enemy.Remove();
+        }
     }
 }

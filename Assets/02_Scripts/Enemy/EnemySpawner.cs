@@ -8,8 +8,11 @@ using UnityEngine;
 /// </summary>
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("---- 동적으로 로드한 적 Prefab 변수(읽기 전용) ----")]
+    [SerializeField] GameObject _enemyPrefab;
+
     [Header("---- 적 생성 ----")]
-    [SerializeField] Enemy _enemyPrefab;
+    [SerializeField] string _enemyPrefabPath;       // Enemy Prefab Asset이 저장되어 있는 경로
     [SerializeField] float _maxSpawnCount;
     [SerializeField] Hero _hero;
 
@@ -20,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float _spawnSpan;
 
     [Header("---- 적 목록(읽기 전용) ----")]
-    [SerializeField] List<Enemy> _enemies = new();   // 생성된 적 리스트
+    [SerializeField] List<Enemy> _enemies = new();  // 생성된 적 리스트
 
     Coroutine _spawnEnemyRoutine;                   // 적 생성 코루틴 변수
 
@@ -28,6 +31,12 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        _enemyPrefab = GameManager.Instance.ResourcesManager.LoadPrefab(_enemyPrefabPath);
+        if (_enemyPrefab == null)
+        {
+            return;
+        }
+
         _spawnEnemyRoutine = StartCoroutine(SpawnEnemyRoutine());
     }
 
@@ -83,7 +92,9 @@ public class EnemySpawner : MonoBehaviour
         }
 
         // 1. Instantiate로 복제본 생성
-        Enemy enemy = Instantiate(_enemyPrefab, transform);
+        GameObject enemyGo = Instantiate(_enemyPrefab, transform);
+        Enemy enemy = enemyGo.GetComponent<Enemy>();
+        if (enemy == null) return;
 
         // 2. 복제본의 위치 설정
         enemy.transform.position = GetRandomPos();
@@ -97,4 +108,20 @@ public class EnemySpawner : MonoBehaviour
         //  5. 생성된 복제본 이벤트 구독
         enemy.OnRemoved += OnEnemyRemoved;
     }
+
+    //void Initialize()
+    //{
+    //    GameObject enemyGo = Resources.Load<GameObject>(_enemyPrefabPath);
+    //    if (enemyGo == null)
+    //    {
+    //        Debug.LogError($"{_enemyPrefabPath} 경로가 존재하지 않습니다.");
+    //        return;
+    //    }
+    //    _enemyPrefab = enemyGo.GetComponent<Enemy>();
+    //    if (_enemyPrefab == null)
+    //    {
+    //        Debug.LogError($"{_enemyPrefabPath} 프리펩에 enemy 컴포넌트가 존재하지 않습니다.");
+    //        return;
+    //    }
+    //}
 }

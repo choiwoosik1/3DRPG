@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 4786777903489313189}
   - component: {fileID: 4444918196426718837}
   m_Layer: 8
-  m_Name: Enemy_Zombie
+  m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -189,20 +189,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1825b64a1af9b1741bd7b8176fa1d86c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _target: {fileID: 0}
   _model: {fileID: 8534585984863897700}
   _navAgent: {fileID: 4444918196426718837}
-  _target: {fileID: 0}
   _animator: {fileID: 5512813856622516969}
   _damageableDetector: {fileID: 4786777903489313189}
   _characterAnimatorHandler: {fileID: 7944975867596513124}
   _hud: {fileID: 2704807493476919629}
+  _collider: {fileID: 1363186574448673860}
   _thinkSpan: 0.5
   _roamDistance: 5
   _roamSpan: 3
   _traceDistance: 30
-  _attackDistance: 3
+  _attackDistance: 1.5
   _attackSpan: 2
-  _rotAngleThreshold: 0
+  _rotAngleThreshold: 10
+  _deadDutarion: 2
 --- !u!114 &8534585984863897700
 MonoBehaviour:
   m_ObjectHideFlags: 0

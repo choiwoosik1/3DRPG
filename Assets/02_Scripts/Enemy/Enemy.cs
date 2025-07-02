@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] DamageableDetector _damageableDetector;
     [SerializeField] CharacterAnimatorHandler _characterAnimatorHandler;
     [SerializeField] EnemyHud _hud;
+    [SerializeField] Collider _collider;
 
     [Header("---- AI ----")]
     [SerializeField] float _thinkSpan;          // AI 판단 간격
@@ -37,6 +38,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float _attackDistance;     // 공격 거리
     [SerializeField] float _attackSpan;         // 공격 간격(초)
     [SerializeField] float _rotAngleThreshold;  // 회전 각도 임계값
+    [SerializeField] float _deadDutarion;
 
     /// <summary>
     /// 적 제거 이벤트 변수
@@ -63,10 +65,13 @@ public class Enemy : MonoBehaviour
     /// </summary>
     bool _isRotating = false;
 
+    Coroutine _calculateStateRoutine;
+
 
     public float ThinkSpan => _thinkSpan;
     public float RoamSpan => _roamSpan;
     public float AttackSpan => _attackSpan;
+    public float DeadDuration => _deadDutarion;
 
     /// <summary>
     /// Enemy 컴포넌트를 초기화하는 함수
@@ -101,7 +106,7 @@ public class Enemy : MonoBehaviour
         // 체력 변경 이벤트 구독
         _model.OnHpChanged += _hud.SetHPBar;
 
-        StartCoroutine(CalculateStateRoutine());
+        _calculateStateRoutine = StartCoroutine(CalculateStateRoutine());
     }
 
     private void Update()
@@ -153,6 +158,9 @@ public class Enemy : MonoBehaviour
     {
         // 기존 상태가 새로 바꾸려는 상태와 동일하면 return
         if (_currentState.StateType == stateType) return;
+
+        // 기존 상태가 Dead 상태이면 return
+        if (_currentState.StateType == EnemyStateType.Dead) return;
 
         // 없는 상태로 바꾸려는 경우 return
         int stateIndex = (int)stateType;
@@ -270,7 +278,31 @@ public class Enemy : MonoBehaviour
             _model.RotSpeed * Time.deltaTime);
     }
 
+    /// <summary>
+    /// 사망했을 때 자동으로 실행되는 함수
+    /// </summary>
     void OnDead()
+    {
+        // AI 상태 계산 코루틴 중지
+        StopCoroutine(_calculateStateRoutine);
+
+        // 사망 애니메이션 재생
+        _animator.SetTrigger(AnimatorParameters.OnDead);
+
+        // 콜라이더 충돌 해제
+        _collider.enabled = false;
+
+        // NavMeshAgent Off
+        _navAgent.enabled = false;
+
+        // 사망 상태로 변경
+        ChangeState(EnemyStateType.Dead);
+    }
+
+    /// <summary>
+    /// 제거하는 함수
+    /// </summary>
+    public void Remove()
     {
         OnRemoved?.Invoke(this);
         OnRemoved = null;           // 제거 이벤트 전체 구독 해지
