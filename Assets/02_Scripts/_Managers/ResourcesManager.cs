@@ -26,7 +26,7 @@ public class ResourcesManager : MonoBehaviour
         GameObject prefab = Resources.Load<GameObject>(path);
         if(prefab == null )
         {
-            Debug.LogError($"{prefab}경로 프리펩이 존재하지 않습니다.");
+            Debug.LogError($"{path}경로 프리펩이 존재하지 않습니다.");
         }
         else
         {

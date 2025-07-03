@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] ResourcesManager _resourcesManager;
     public ResourcesManager ResourcesManager => _resourcesManager;
 
+    [SerializeField] PoolManager _poolManager;
+    public PoolManager PoolManager => _poolManager; 
+
     /// <summary>
     /// GameManager의 싱글톤 객체(인스턴스)
     /// 필요 시 Scene에 GameObject를 자동으로 새로 생성하고
@@ -72,5 +75,14 @@ public class GameManager : MonoBehaviour
         {
             _resourcesManager = gameObject.AddComponent<ResourcesManager>();
         }
+
+        _poolManager = GetComponent<PoolManager>();
+        
+        if(_poolManager == null)
+        {
+            _poolManager = gameObject.AddComponent<PoolManager>();
+        }
+
+        _poolManager.Initialize(_resourcesManager);
     }
 }

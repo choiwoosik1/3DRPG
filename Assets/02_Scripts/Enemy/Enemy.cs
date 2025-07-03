@@ -80,10 +80,9 @@ public class Enemy : MonoBehaviour
     public void Initialize(Transform target)
     {
         _target = target;
-    }
 
-    private void Start()
-    {
+        _collider.enabled = true;
+        _navAgent.enabled = true;
         _navAgent.speed = _model.MoveSpeed;
         _navAgent.angularSpeed = _model.RotSpeed;
 
@@ -93,10 +92,17 @@ public class Enemy : MonoBehaviour
         _states[(int)EnemyStateType.Dead] = new DeadState(this);
 
         _currentState = _states[(int)EnemyStateType.Idle];
+        _currentState.Enter();
 
+        // 상태 계산 코루틴 실행
+        _calculateStateRoutine = StartCoroutine(CalculateStateRoutine());
+    }
+
+    private void Awake()
+    {
         // 사망 이벤트 구독
         _model.OnDead += OnDead;
-        
+
         // 공격 판정 이벤트 구독
         _characterAnimatorHandler.OnAttacked += OnAttcked;
 
@@ -105,8 +111,6 @@ public class Enemy : MonoBehaviour
 
         // 체력 변경 이벤트 구독
         _model.OnHpChanged += _hud.SetHPBar;
-
-        _calculateStateRoutine = StartCoroutine(CalculateStateRoutine());
     }
 
     private void Update()
@@ -295,7 +299,6 @@ public class Enemy : MonoBehaviour
         // 사망 상태로 변경
         ChangeState(EnemyStateType.Dead);
 
-
         // NavMeshAgent Off
         _navAgent.enabled = false;
     }
@@ -307,7 +310,24 @@ public class Enemy : MonoBehaviour
     {
         OnRemoved?.Invoke(this);
         OnRemoved = null;           // 제거 이벤트 전체 구독 해지
-        Destroy(gameObject);
+
+        Poolable poolable = GetComponent<Poolable>();
+        if(poolable != null )
+        {
+            poolable.ReturnToPool();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // Pool로 되돌아가지 못하고 게임에서 제거될 수 있기 때문에
+    // 외부와 통하는 이벤트 변수는 전부 구독 해제 하는 것이 안전
+    // 내부는 상관 없음.
+    private void OnDestroy()
+    {
+        OnRemoved = null;
     }
 
     private void OnDrawGizmosSelected()

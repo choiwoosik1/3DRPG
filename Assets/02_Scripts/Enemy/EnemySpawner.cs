@@ -8,6 +8,9 @@ using UnityEngine;
 /// </summary>
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("---- Pool Manager(읽기 전용) ----")]
+    [SerializeField] PoolManager _poolManager;
+
     [Header("---- 동적으로 로드한 적 Prefab 변수(읽기 전용) ----")]
     [SerializeField] GameObject _enemyPrefab;
 
@@ -31,11 +34,13 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        _enemyPrefab = GameManager.Instance.ResourcesManager.LoadPrefab(_enemyPrefabPath);
-        if (_enemyPrefab == null)
-        {
-            return;
-        }
+        //_enemyPrefab = GameManager.Instance.ResourcesManager.LoadPrefab(_enemyPrefabPath);
+        //if (_enemyPrefab == null)
+        //{
+        //    return;
+        //}
+
+        _poolManager = GameManager.Instance.PoolManager;
 
         _spawnEnemyRoutine = StartCoroutine(SpawnEnemyRoutine());
     }
@@ -92,11 +97,14 @@ public class EnemySpawner : MonoBehaviour
         }
 
         // 1. Instantiate로 복제본 생성
-        GameObject enemyGo = Instantiate(_enemyPrefab, transform);
+        GameObject enemyGo = _poolManager.GetFromPool(_enemyPrefabPath);
+        if (enemyGo == null) return;
+
         Enemy enemy = enemyGo.GetComponent<Enemy>();
         if (enemy == null) return;
 
         // 2. 복제본의 위치 설정
+        enemy.transform.SetParent(transform);
         enemy.transform.position = GetRandomPos();
 
         // 3. 복제본 초기화
@@ -108,6 +116,31 @@ public class EnemySpawner : MonoBehaviour
         //  5. 생성된 복제본 이벤트 구독
         enemy.OnRemoved += OnEnemyRemoved;
     }
+
+    //void SpawnEnemy()
+    //{
+    //    if (_enemies.Count >= _maxSpawnCount)
+    //    {
+    //        return;
+    //    }
+
+    //    // 1. Instantiate로 복제본 생성
+    //    GameObject enemyGo = Instantiate(_enemyPrefab, transform);
+    //    Enemy enemy = enemyGo.GetComponent<Enemy>();
+    //    if (enemy == null) return;
+
+    //    // 2. 복제본의 위치 설정
+    //    enemy.transform.position = GetRandomPos();
+
+    //    // 3. 복제본 초기화
+    //    enemy.Initialize(_hero.transform);
+
+    //    // 4. 복제본 리스트에 추가
+    //    _enemies.Add(enemy);
+
+    //    //  5. 생성된 복제본 이벤트 구독
+    //    enemy.OnRemoved += OnEnemyRemoved;
+    //}
 
     //void Initialize()
     //{
