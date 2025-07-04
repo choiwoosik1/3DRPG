@@ -8,4 +8,9 @@ public static class Extension
     {
         return Utils.Contains(layerMask, layer);
     }
+
+    public static void DestroyOrReturnToPool(this GameObject go)
+    {
+        Utils.DestrotyOrReturnToPool(go);
+    }
 }

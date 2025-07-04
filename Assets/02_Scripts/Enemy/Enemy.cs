@@ -311,15 +311,7 @@ public class Enemy : MonoBehaviour
         OnRemoved?.Invoke(this);
         OnRemoved = null;           // 제거 이벤트 전체 구독 해지
 
-        Poolable poolable = GetComponent<Poolable>();
-        if(poolable != null )
-        {
-            poolable.ReturnToPool();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        gameObject.DestroyOrReturnToPool();
     }
 
     // Pool로 되돌아가지 못하고 게임에서 제거될 수 있기 때문에
