@@ -15,7 +15,7 @@ public class Inventory : MonoBehaviour
 
     [Header("---- 컴포넌트 참조 ----")]
     [SerializeField] ItemView[] _itemViews;
-
+    [SerializeField] GameObject _inventoryPanel;
     // 유저가 보유하고 있는 아이템 배열   
     ItemModel[] _itemModels = new ItemModel[_slotCount];
 
@@ -77,6 +77,11 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F2))
         {
             AddItem("Apple");   
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            _inventoryPanel.SetActive(true);
         }
     }
 }
