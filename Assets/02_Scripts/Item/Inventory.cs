@@ -71,7 +71,7 @@ public class Inventory : MonoBehaviour
     {
         if(_itemConfigMap.ContainsKey(id) == false)
         {
-            Debug.LogWarning($"존재하지 않는 아이템입니다. (ID : {id})");
+            Debug.LogWarning($"존재하지 않는 아이템입니다. (ID : {id})");   
             return;
         }
 
@@ -166,6 +166,16 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F2))
         {
             AddItem("Apple");   
+        }
+
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            AddItem("Boots");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            AddItem("Armor");
         }
     }
 }

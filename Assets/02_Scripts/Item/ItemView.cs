@@ -26,6 +26,11 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         Debug.Log($"드래그 시작 ! {gameObject.name}", gameObject);
 
         _inventory.BeginDrag(_slotIndex);
+
+        if (_iconImage != null)
+        {
+            _iconImage.enabled = false;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -33,14 +38,14 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         Debug.Log($"드래그 중... {gameObject.name}", gameObject);
 
             
-        _inventory.Dragging(eventData.position);    
+        _inventory.Dragging(eventData.position);
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log($"드랍 ! {gameObject.name}", gameObject);
 
-        _inventory.Drop(_slotIndex);    
+        _inventory.Drop(_slotIndex);
     }
 
     public void OnEndDrag(PointerEventData eventData)
