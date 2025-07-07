@@ -34,5 +34,13 @@ public abstract class InputHandler : MonoBehaviour
     /// </summary>
     public abstract event Action OnJumpInput;
 
+    /// <summary>
+    /// 질주 입력 이벤트
+    /// </summary>
     public abstract event Action<bool> OnSprintInput;
+
+    /// <summary>
+    /// 인벤토리 메뉴 여닫기 입력 이벤트
+    /// </summary>
+    public abstract event Action OnInventoryInput;
 }

@@ -14,6 +14,7 @@ public class InputManagerHandler : InputHandler
     public override event Action OnAttackInput;
     public override event Action OnJumpInput;
     public override event Action<bool> OnSprintInput;
+    public override event Action OnInventoryInput;
 
     Vector2 _moveInput;         // 이동 입력 벡터
     Vector2 _cameraRotInput;    // 카메라 회전 입력 벡터
@@ -53,6 +54,11 @@ public class InputManagerHandler : InputHandler
         if (Input.GetButtonUp("Sprint"))
         {
             OnSprintInput?.Invoke(false);
+        }
+
+        if (Input.GetButton("Inventory"))
+        {
+            OnInventoryInput?.Invoke();
         }
     }
 }
