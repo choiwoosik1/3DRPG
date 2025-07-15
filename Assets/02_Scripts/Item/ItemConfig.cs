@@ -22,10 +22,13 @@ public class ItemConfig : ScriptableObject
     [TextArea(3, 5)][SerializeField] string _description;       // 아이템 설명
     [SerializeField] int _price;                                // 아이템 가격
     [SerializeField] Sprite _iconSprite;                        // 아이콘 스프라이트
+    [SerializeField] ItemEffect _effect;                        // 아이템 효과
 
     public string Id => _id;
     public ItemType ItemType => _itemType;
     public string ItemName => _itemName;
     public int Price => _price;
     public Sprite IconSprite => _iconSprite;
+    public string Description => _description;
+    public ItemEffect Effect => _effect;
 }

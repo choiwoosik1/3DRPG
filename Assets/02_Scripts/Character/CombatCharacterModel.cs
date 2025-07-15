@@ -51,4 +51,15 @@ public class CombatCharacterModel : MonoBehaviour, IDamageable, IAttackable
             OnDead?.Invoke(); 
         }
     }
+
+    /// <summary>
+    /// 체력을 회복하는 함수
+    /// </summary>
+    /// <param name="amount">회복량</param>
+    public void Heal(float amount)
+    {
+        amount = MathF.Max(amount, 0);
+        _currentHp = MathF.Min(_currentHp + amount, _maxHp);
+        OnHpChanged?.Invoke(_currentHp, _maxHp);
+    }
 }

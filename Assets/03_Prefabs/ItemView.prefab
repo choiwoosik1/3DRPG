@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _iconImage: {fileID: 6295040448172237420}
+  _toolTip: {fileID: 0}
 --- !u!1 &4570936596768211109
 GameObject:
   m_ObjectHideFlags: 0

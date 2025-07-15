@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 아이템의 정보를 UI에 표시하는 클래스
 /// </summary>
-public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     Inventory _inventory;
     int _slotIndex;
@@ -21,18 +21,22 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         _slotIndex = slotIndex;
     }
 
+    /// <summary>
+    /// 드래그 시 빈자리 표현을 위한 아이콘 이미지 숨김 / 표시 함수 
+    /// </summary>
+    /// <param name="isHidden">숨김 여부</param>
+    public void Hide(bool isHidden)
+    {
+        _iconImage.enabled = !isHidden;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log($"드래그 시작 ! {gameObject.name}", gameObject);
 
         _inventory.BeginDrag(_slotIndex);
-
-        if (_iconImage != null)
-        {
-            _iconImage.enabled = false;
-        }
     }
-
+    
     public void OnDrag(PointerEventData eventData)
     {
         Debug.Log($"드래그 중... {gameObject.name}", gameObject);
@@ -68,5 +72,15 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         {
             _iconImage.gameObject.SetActive(false);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -9,6 +10,8 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     const int _slotCount = 18;
+    TextMeshProUGUI _descriptText;
+    TextMeshProUGUI _nameText;
 
     [Header("---- 아이템 설정 데이터 ----")]
     [SerializeField] ItemConfig[] _itemConfigs;
@@ -17,8 +20,9 @@ public class Inventory : MonoBehaviour
     [Header("---- 컴포넌트 참조 ----")]
     [SerializeField] ItemView[] _itemViews;
     [SerializeField] ItemView _selectedItemView;
-    [SerializeField] GameObject _inventoryPanel;
+    [SerializeField] HeroModel _heroModel;
 
+    public HeroModel HeroModel => _heroModel;
 
     // 유저가 보유하고 있는 아이템 배열   
     ItemModel[] _itemModels = new ItemModel[_slotCount];
@@ -121,6 +125,7 @@ public class Inventory : MonoBehaviour
         if(item != null)
         {
             _selectedSlotIndex = slotIndex;
+            _itemViews[_selectedSlotIndex].Hide(true);
             _selectedItemView.SetItemModel(item);
             _selectedItemView.gameObject.SetActive(true);
         }
@@ -152,7 +157,13 @@ public class Inventory : MonoBehaviour
         _selectedItemView.gameObject.SetActive(false);
 
         if (_selectedSlotIndex < 0) return;
+        _itemViews[_selectedSlotIndex].Hide(false);
         _selectedSlotIndex = -1;
+    }
+
+    public void ShowToolTip()
+    {
+        
     }
 
     // 테스트
