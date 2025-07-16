@@ -5,9 +5,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// 아이템의 정보를 UI에 표시하는 클래스
+/// 아이템 View
+/// 인벤토리에서 각 아이템 슬롯의 기능으르 담당
+/// 아이템 아이콘 표시, 드로그앤 드롭, 포인터 오버, 클릭 기능 etc.
 /// </summary>
-public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     Inventory _inventory;
     int _slotIndex;
@@ -32,6 +34,8 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
         Debug.Log($"드래그 시작 ! {gameObject.name}", gameObject);
 
         _inventory.BeginDrag(_slotIndex);
@@ -39,6 +43,8 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     
     public void OnDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
         Debug.Log($"드래그 중... {gameObject.name}", gameObject);
 
             
@@ -47,6 +53,8 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
         Debug.Log($"드랍 ! {gameObject.name}", gameObject);
 
         _inventory.Drop(_slotIndex);
@@ -54,6 +62,8 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
         Debug.Log($"드래그 종료 ! {gameObject}", gameObject);
 
         _inventory.EndDrag();
@@ -76,11 +86,21 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        _inventory.ShowToolTip(_slotIndex);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        
+        _inventory.HideItemDescVIew();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // 우클릭인 경우에만 실행
+        if (eventData.button != PointerEventData.InputButton.Right) return;
+
+        Debug.Log($"클릭 ! {gameObject.name}", gameObject);
+        _inventory.UseItem(_slotIndex);
+
     }
 }

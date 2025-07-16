@@ -62,4 +62,15 @@ public class CombatCharacterModel : MonoBehaviour, IDamageable, IAttackable
         _currentHp = MathF.Min(_currentHp + amount, _maxHp);
         OnHpChanged?.Invoke(_currentHp, _maxHp);
     }
+
+    /// <summary>
+    /// 최대 체력을 증가하는 함수
+    /// </summary>
+    /// <param name="upgradeHp">최대 체력 증가량</param>
+    public void UpgradeHp(float upgradeHp)
+    {
+        upgradeHp = MathF.Max(upgradeHp, 0);
+        _maxHp = _maxHp + upgradeHp;
+        OnHpChanged?.Invoke(_currentHp, _maxHp);
+    }
 }

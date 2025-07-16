@@ -19,3 +19,4 @@ MonoBehaviour:
     \uB9DB\uC788\uC73C\uBA70 \uBA39\uC73C\uBA74 \uCCB4\uB825\uC744 10 \uD68C\uBCF5\uD55C\uB2E4"
   _price: 10
   _iconSprite: {fileID: 21300000, guid: 60c1d42986dc0094c808b9e135f31ba2, type: 3}
+  _effect: {fileID: 11400000, guid: 0ae7e5e0d51375b4eb22980de02df5be, type: 2}
