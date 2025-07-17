@@ -15,7 +15,8 @@ MonoBehaviour:
   _id: Rings
   _itemType: 1
   _itemName: "\uBC18\uC9C0"
-  _description: "\uCC29\uC6A9\uD558\uBA74 \uCD5C\uB300\uCCB4\uB825\uC744 10 \uB298\uB824\uC900\uB2E4"
+  _description: "\uCC29\uC6A9\uD558\uBA74 \uCD5C\uB300\uCCB4\uB825\uC744 20 \uB298\uB824\uC900\uB2E4"
   _price: 100
   _iconSprite: {fileID: 21300000, guid: f66c057114b8725409847a8a8e83a75b, type: 3}
-  _effect: {fileID: 0}
+  _acquiredEffect: {fileID: 11400000, guid: 37e6aa8ea173df843978f7535a9f4552, type: 2}
+  _usedEffect: {fileID: 0}

@@ -9,12 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65133a0066675cd4fa3514ac961e26cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 589f23058f7a1ac42aa4e111c5920fa5, type: 3}
   m_Name: 0_Mace
   m_EditorClassIdentifier: 
   _id: Mace
   _itemType: 2
-  _itemName: "\uBA54\uC774\uC2A4"
+  _itemName: "\uD5E4\uBA38"
   _description: "\uAE30\uBCF8 \uBB34\uAE30"
-  _price: 100
+  _price: 10
   _iconSprite: {fileID: 21300000, guid: 74b95f8fcc76fcc4cb42a25e8d3cdbe0, type: 3}
+  _acquiredEffect: {fileID: 0}
+  _usedEffect: {fileID: 0}
+  _equipmentPrefab: {fileID: 0}

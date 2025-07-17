@@ -22,7 +22,9 @@ public class Inventory : MonoBehaviour
     [SerializeField] ItemView _selectedItemView;
     [SerializeField] HeroModel _heroModel;
     [SerializeField] ItemDescription _itemDescView;
+    [SerializeField] EquipController _equipContoller;
 
+    public EquipController EquipController => _equipContoller;
     public HeroModel HeroModel => _heroModel;
 
     // 유저가 보유하고 있는 아이템 배열   
@@ -49,6 +51,22 @@ public class Inventory : MonoBehaviour
             _itemViews[i].Initialize(this, i);
             _itemViews[i].SetItemModel(_itemModels[i]);
 
+        }
+    }
+
+    /// <summary>
+    /// 아이템 설정 데이터로 아이템 모델을 만들어 반환해 주는 함수
+    /// </summary>
+    /// <param name="itemConfig"></param>
+    /// <returns></returns>
+    public ItemModel CreateItemModel(ItemConfig itemConfig)
+    {
+        switch(itemConfig)
+        {
+            case EquipmentItemConfig equipmentItemConfig:
+                return new EquipmentItemModel(equipmentItemConfig);
+            default:
+                return new ItemModel(itemConfig);
         }
     }
 
@@ -91,7 +109,7 @@ public class Inventory : MonoBehaviour
             if (_itemModels[i] == null)
             {
                 // 아이템 설정 데이터로 아이템 모델 생성
-                _itemModels[i] = new ItemModel(itemConfig);
+                _itemModels[i] = CreateItemModel(itemConfig);
 
                 // 아이템 획득 시 실행되어야 하는 함수 호출
                 _itemModels[i].Acquire(this);

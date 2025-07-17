@@ -10,7 +10,7 @@ using UnityEngine;
 public class ItemModel
 {
     ItemConfig _config;
-    Inventory _inventory;
+    protected Inventory _inventory;
     public ItemConfig Config => _config;
     public ItemType ItemType => _config.ItemType;
     public ItemModel(ItemConfig config)
@@ -26,25 +26,20 @@ public class ItemModel
     public void Acquire(Inventory inventory)
     {
         _inventory = inventory;
-        if(ItemType == ItemType.NonConsumable)
-        {
-            if (_config.Effect == null) return;
 
-            _config.Effect.Apply(inventory);
-        }
+        if (_config.AcquiredEffect == null) return;
+        _config.AcquiredEffect.Apply(_inventory);
     }
 
     /// <summary>
     /// 아이템을 사용하는 함수
     /// </summary>
-    public void Use()
+    public virtual void Use()
     {
         if (_inventory == null) return;
-        if (_config.Effect == null) return;
-        if (ItemType == ItemType.NonConsumable) return;
 
-        Debug.Log($"{_config.ItemName} 아이템 사용 !");
-        _config.Effect.Apply(_inventory);
+        if (_config.UsedEffect == null) return;
+        _config.UsedEffect.Apply(_inventory);
     }
 
     /// <summary>
@@ -55,12 +50,26 @@ public class ItemModel
     {
         if (_inventory == null) return;
 
-        if (ItemType == ItemType.NonConsumable)
-        {
-            if (_config.Effect == null) return;
-
-            _config.Effect.Disapply(_inventory);
-        }
+        if (_config.AcquiredEffect == null) return;
+        _config.AcquiredEffect.Disapply(_inventory);
     }
 }
-        
+
+public class EquipmentItemModel : ItemModel
+{
+    Equipment _equipmentPrefab;
+    public Equipment EquipmentPrefab => _equipmentPrefab;
+
+    public EquipmentItemModel(EquipmentItemConfig config) : base(config)
+    {
+        _equipmentPrefab = config.EquipmentPrefab;
+    }
+
+    public override void Use()
+    {
+        if(_inventory == null) return;
+
+        // 장비 장착
+        _inventory.EquipController.Equip(this);
+    }
+}        
