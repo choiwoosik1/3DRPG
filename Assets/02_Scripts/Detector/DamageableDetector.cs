@@ -67,4 +67,9 @@ public class DamageableDetector : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(_detectPoint.position, _radius);
     }
+
+    public void SetDetectPoint(Weapon weapon)
+    {
+        _detectPoint = weapon.HitPoint;
+    }
 }

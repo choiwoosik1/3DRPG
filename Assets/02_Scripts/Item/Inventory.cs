@@ -152,7 +152,7 @@ public class Inventory : MonoBehaviour
         if(itemModel == null) return;
         
         itemModel.Use();
-        if(itemModel.ItemType == ItemType.Consumable)
+        if(itemModel.ItemType == ItemType.Consumable || itemModel.ItemType == ItemType.Equipment)
         {
             RemoveItem(slotIndex);
         }
