@@ -16,6 +16,8 @@ public class Hero : MonoBehaviour
     [SerializeField] CharacterAnimatorHandler _animatorHandler;
     [SerializeField] DamageableDetector _damageableDetector;
     [SerializeField] HeroStatusView _statusView;
+    [SerializeField] EquipController _equipController;
+    [SerializeField] Transform _basicHitPoint;
 
     private void Start()
     {
@@ -42,6 +44,9 @@ public class Hero : MonoBehaviour
 
         // 체력 변경 이벤트 구독
         _model.OnHpChanged += _statusView.SetHpBar;
+
+        // 무기 장착 이벤트 구독
+        _equipController.OnWeaponEquipped += OnWeaponEquipped;
     }
 
 
@@ -123,5 +128,21 @@ public class Hero : MonoBehaviour
             moveSpeed *= _model.SprintRate;
         }
         _mover.SetMoveSpeed(moveSpeed);
+    }
+
+    /// <summary>
+    /// 무기 장착 시 호출되는 함수
+    /// </summary>
+    /// <param name="hitPoint"></param>
+    void OnWeaponEquipped(Transform hitPoint)
+    {
+        if (hitPoint == null)
+        {
+            _damageableDetector.SetDetectPoint(_basicHitPoint);
+        }
+        else
+        {
+            _damageableDetector.SetDetectPoint(hitPoint);
+        }
     }
 }

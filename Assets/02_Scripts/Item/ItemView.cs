@@ -16,7 +16,6 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     ItemModel _model;
     [SerializeField] Image _iconImage;
-
     public void Initialize(Inventory inventory, int slotIndex)
     {
         _inventory = inventory;
@@ -102,5 +101,6 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         Debug.Log($"클릭 ! {gameObject.name}", gameObject);
         _inventory.UseItem(_slotIndex);
 
+        
     }
 }

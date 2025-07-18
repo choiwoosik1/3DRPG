@@ -50,8 +50,9 @@ public class Inventory : MonoBehaviour
         {
             _itemViews[i].Initialize(this, i);
             _itemViews[i].SetItemModel(_itemModels[i]);
-
         }
+
+        _equipContoller.Initialize();
     }
 
     /// <summary>
@@ -90,6 +91,37 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
+    /// 슬롯 번호로 아이템 모델을 반환을 시도하는 함수
+    /// </summary>
+    /// <param name="slotIndex">슬롯 번호</param>
+    /// <param name="itemModel">찾은 아이템 모델</param>
+    /// <returns>아이템 모델 존재 여부</returns>
+    public bool TryGetItemModel(int slotIndex, out ItemModel itemModel)
+    {
+        itemModel = null;
+
+        // 인덱스 범위 검사
+        if (slotIndex < 0 || slotIndex >= _itemViews.Length) return false;
+
+        itemModel = _itemModels[slotIndex];
+        return itemModel != null;
+    }
+
+    /// <summary>
+    /// 아이템 슬롯이 비어 있는지 여부를 반환하는 함수
+    /// </summary>
+    /// <param name="slotIndex">슬롯 번호</param>
+    /// <returns></returns>
+    public bool GetIsEmptySlot(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= _itemViews.Length)
+            return false;
+
+        ItemModel itemModel = _itemModels[slotIndex];
+        return itemModel == null;
+    }
+
+    /// <summary>
     /// 아이템 ID로 아이템을 획득하는 함수
     /// </summary>
     /// <param name="Id">획득할 아이템의 ID</param>
@@ -112,7 +144,7 @@ public class Inventory : MonoBehaviour
                 _itemModels[i] = CreateItemModel(itemConfig);
 
                 // 아이템 획득 시 실행되어야 하는 함수 호출
-                _itemModels[i].Acquire(this);
+                _itemModels[i].Acquire(this, i);
 
                 // 아이템 뷰에 아이템 모델 설정
                 _itemViews[i].SetItemModel(_itemModels[i]);
@@ -124,20 +156,40 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
+    /// 이미 있는 아이템을 인벤토리에 추가 시도하는 함수
+    /// </summary>
+    /// <param name="itemModel"></param>
+    /// <returns></returns>
+    public bool TryAddItem(ItemModel itemModel)
+    {
+        for(int i = 0; i < _itemModels.Length; i++)
+        {
+            if (_itemModels[i] == null)
+            {
+                _itemModels[i] = itemModel;
+                itemModel.SetSlotIndex(i);
+                _itemViews[i].SetItemModel(itemModel);
+                return true;
+            }
+        }
+
+        Debug.Log("아이템 슬롯이 가득 찼습니다.");
+        return false;
+    }
+
+    /// <summary>
     /// 아이템을 제거하는 함수
     /// </summary>
     /// <param name="slotIndex">제거할 아이템 슬롯 번호</param>
     public void RemoveItem(int slotIndex)
     {
-        if (slotIndex < 0 || slotIndex >= _itemModels.Length) return;
-
-        // 아이템 모델 찾기
-        ItemModel itemModel = _itemModels[slotIndex];
-        if(itemModel == null) return;
-
-        itemModel.Remove();
-        _itemModels[slotIndex] = null;
-        _itemViews[slotIndex].SetItemModel(_itemModels[slotIndex]);
+        if (TryGetItemModel(slotIndex, out ItemModel itemModel) == true)
+        {
+            itemModel.Remove();
+            _itemModels[slotIndex] = null;
+            _itemViews[slotIndex].SetItemModel(_itemModels[slotIndex]);
+         
+        }
     }
 
     /// <summary>
@@ -146,15 +198,13 @@ public class Inventory : MonoBehaviour
     /// <param name="slotIndex">사용할 아이템 슬롯 번호</param>
     public void UseItem(int slotIndex)
     {
-        if (slotIndex < 0 || slotIndex >= _itemModels.Length) return;
-
-        ItemModel itemModel = _itemModels[slotIndex];
-        if(itemModel == null) return;
-        
-        itemModel.Use();
-        if(itemModel.ItemType == ItemType.Consumable || itemModel.ItemType == ItemType.Equipment)
+        if(TryGetItemModel(slotIndex, out ItemModel itemModel) == true)
         {
-            RemoveItem(slotIndex);
+            if (itemModel.ItemType == ItemType.Consumable || itemModel.ItemType == ItemType.Equipment)
+            {
+                RemoveItem(slotIndex);
+            }
+            itemModel.Use();
         }
     }
 
@@ -171,6 +221,9 @@ public class Inventory : MonoBehaviour
         ItemModel temp = _itemModels[a];
         _itemModels[a] = _itemModels[b];
         _itemModels[b] = temp;
+
+        _itemModels[a]?.SetSlotIndex(a);
+        _itemModels[b]?.SetSlotIndex(b);
 
         // 자리 바꾼 번호에 해당하는 ItemView 갱신
         _itemViews[a].SetItemModel(_itemModels[a]);

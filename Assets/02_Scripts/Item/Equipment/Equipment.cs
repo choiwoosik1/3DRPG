@@ -28,16 +28,16 @@ public class Equipment : MonoBehaviour
     [SerializeField] float _bonusDamage;
 
     // 이 장비가 어떤 아이템에서 비롯된 것인지
-    ItemModel _itemModel;
+    EquipmentItemModel _itemModel;
 
     public virtual EquipSlotType EquipSlotType => _equipSlotType;
     public float BonusMaxHp => _bonusMaxHp;
     public float BonusArmor => _bonusArmor;
     public float BonusDamage => _bonusDamage;
 
-    public ItemModel ItemModel => _itemModel;
+    public EquipmentItemModel ItemModel => _itemModel;
     
-    public void SetItemModel(ItemModel itemModel)
+    public void SetItemModel(EquipmentItemModel itemModel)
     {
         _itemModel = itemModel;
     }

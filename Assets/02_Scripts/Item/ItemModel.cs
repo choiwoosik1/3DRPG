@@ -11,11 +11,18 @@ public class ItemModel
 {
     ItemConfig _config;
     protected Inventory _inventory;
+    int _slotIndex = -1;
     public ItemConfig Config => _config;
     public ItemType ItemType => _config.ItemType;
+    public int SlotIndex => _slotIndex;
     public ItemModel(ItemConfig config)
     {
         _config = config;
+    }
+
+    public void SetSlotIndex(int slotIndex)
+    {
+        _slotIndex = slotIndex;
     }
 
     /// <summary>
@@ -23,9 +30,10 @@ public class ItemModel
     /// 비 소모성 아이템의 경우 패시브 효과를 적용
     /// </summary>
     /// <param name="inventory"></param>
-    public void Acquire(Inventory inventory)
+    public void Acquire(Inventory inventory, int slotIndex)
     {
         _inventory = inventory;
+        _slotIndex = slotIndex;
 
         if (_config.AcquiredEffect == null) return;
         _config.AcquiredEffect.Apply(_inventory);
@@ -48,6 +56,7 @@ public class ItemModel
     /// </summary>
     public void Remove()
     {
+        _slotIndex = -1;
         if (_inventory == null) return;
 
         if (_config.AcquiredEffect == null) return;

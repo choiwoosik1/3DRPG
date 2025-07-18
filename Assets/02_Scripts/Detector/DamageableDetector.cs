@@ -68,8 +68,8 @@ public class DamageableDetector : MonoBehaviour
         Gizmos.DrawWireSphere(_detectPoint.position, _radius);
     }
 
-    public void SetDetectPoint(Weapon weapon)
+    public void SetDetectPoint(Transform hitPoint)
     {
-        _detectPoint = weapon.HitPoint;
+        _detectPoint = hitPoint;
     }
 }
