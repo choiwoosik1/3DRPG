@@ -777,7 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4c2b6f6c6cbf347a2dba06d7f8bf6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotType: 0
+  _slotType: 2
   _iconImage: {fileID: 73906719}
 --- !u!1001 &79912114
 PrefabInstance:
@@ -9084,7 +9084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4c2b6f6c6cbf347a2dba06d7f8bf6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotType: 0
+  _slotType: 3
   _iconImage: {fileID: 693752131}
 --- !u!1001 &696970568
 PrefabInstance:
@@ -9698,7 +9698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4c2b6f6c6cbf347a2dba06d7f8bf6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotType: 0
+  _slotType: 5
   _iconImage: {fileID: 758058661}
 --- !u!1001 &766291709
 PrefabInstance:
@@ -12433,7 +12433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4c2b6f6c6cbf347a2dba06d7f8bf6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotType: 0
+  _slotType: 4
   _iconImage: {fileID: 1038001285}
 --- !u!4 &1041088814 stripped
 Transform:
@@ -15776,7 +15776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4c2b6f6c6cbf347a2dba06d7f8bf6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotType: 0
+  _slotType: 1
   _iconImage: {fileID: 1365829158}
 --- !u!4 &1373906905 stripped
 Transform:
@@ -21665,7 +21665,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1302999973443748731, guid: 0700cce4b3a2f874fa16a331091f7872, type: 3}
       propertyPath: m_RaycastTarget
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6409670426251961288, guid: 0700cce4b3a2f874fa16a331091f7872, type: 3}
       propertyPath: m_Pivot.x
