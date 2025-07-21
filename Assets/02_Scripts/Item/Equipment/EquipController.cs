@@ -73,6 +73,8 @@ public class EquipController : MonoBehaviour
             OnWeaponEquipped?.Invoke(weapon.HitPoint);
         }
 
+        itemModel.SetIsEquipped(true);
+
         SetEquipmentView(slotType, equipment);  
     }
 
@@ -85,6 +87,7 @@ public class EquipController : MonoBehaviour
         if (_equipmentMap.ContainsKey(slotType))
         {
             Equipment equipment = _equipmentMap[slotType];
+            EquipmentItemModel itemModel = equipment.ItemModel;
 
             // 1. 해당 장비가 연결된 아이템 모델을 인벤토리에 추가
             // -> 인벤토리에 아이템 추가 실패 시 장비 해제 불가
@@ -107,7 +110,21 @@ public class EquipController : MonoBehaviour
                 OnWeaponEquipped?.Invoke(null);
             }
 
+            itemModel.SetIsEquipped(false);
+
+            // 6. 장비 ㅅㄹ롯 뷰 갱신
             SetEquipmentView(slotType, null);
+        }
+    }
+
+    public void Unequip(ItemModel itemModel)
+    {
+        if(_equipmentMap.ContainsKey(itemModel.EquipSlotType) == true)
+        {
+            if(_equipmentMap[itemModel.EquipSlotType].ItemModel == itemModel)
+            {
+                UnEquip(itemModel.EquipSlotType);
+            }
         }
     }
 }

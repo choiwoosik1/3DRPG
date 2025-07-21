@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 /// <summary>
@@ -16,6 +17,7 @@ public class ItemModel
     public ItemType ItemType => _config.ItemType;
     public int SlotIndex => _slotIndex;
     public virtual EquipSlotType EquipSlotType => EquipSlotType.None;
+    public virtual bool IsEquipped => false;
 
     public ItemModel(ItemConfig config)
     {
@@ -64,12 +66,26 @@ public class ItemModel
         if (_config.AcquiredEffect == null) return;
         _config.AcquiredEffect.Disapply(_inventory);
     }
+
+    /// <summary>
+    /// 이 아이템을 slotType에 장착할 수 있는지 여부를 반환하는 함수
+    /// </summary>
+    /// <param name="slotType"></param>
+    /// <returns></returns>
+    public virtual bool GetIsEquippable(EquipSlotType slotType)
+    {
+        return false;
+    }
 }
 
 public class EquipmentItemModel : ItemModel
 {
     Equipment _equipmentPrefab;
+    bool _isEquipped = false;
+
     public Equipment EquipmentPrefab => _equipmentPrefab;
+    public override EquipSlotType EquipSlotType => _equipmentPrefab.EquipSlotType;
+    
 
     public EquipmentItemModel(EquipmentItemConfig config) : base(config)
     {
@@ -82,5 +98,15 @@ public class EquipmentItemModel : ItemModel
 
         // 장비 장착
         _inventory.EquipController.Equip(this);
+    }
+
+    public void SetIsEquipped(bool isEquipped)
+    {
+        _isEquipped = isEquipped;
+    }
+
+    public override bool GetIsEquippable(EquipSlotType slotType)
+    {
+        return EquipSlotType == slotType;
     }
 }        

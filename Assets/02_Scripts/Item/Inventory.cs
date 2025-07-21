@@ -216,7 +216,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="a">첫 번째 아이템의 슬롯 번호</param>
     /// <param name="b">두 번째 아이템의 슬롯 번호</param>
-    void SwapItems(int a, int b)
+   public void SwapItems(int a, int b)
     {
         Debug.Log($"{a}번 아이템과 {b}번 아이템 교환");
 
