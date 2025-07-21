@@ -11,7 +11,8 @@ using UnityEngine.UI;
 /// </summary>
 public class EquipmentView : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler,
-    IPointerClickHandler
+    IPointerClickHandler,
+    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     EquipController _equipController;
     Inventory _inventory;
@@ -66,5 +67,35 @@ public class EquipmentView : MonoBehaviour,
     public void OnPointerExit(PointerEventData eventData)
     {
         _dragController.HideTooltip();
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
+        if (_equipMent == null) return;
+
+        _dragController.BeginDrag(_equipMent.ItemModel);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
+        _dragController.Dragging(eventData.position);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
+        _dragController.EndDrag();
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
+        _dragController.DropOnEquipmentView(_slotType);
     }
 }
