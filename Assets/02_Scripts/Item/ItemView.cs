@@ -37,37 +37,29 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        Debug.Log($"드래그 시작 ! {gameObject.name}", gameObject);
 
-        _inventory.BeginDrag(_slotIndex);
+        _dragController.BeginDrag(_model);
     }
     
     public void OnDrag(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        Debug.Log($"드래그 중... {gameObject.name}", gameObject);
-
-            
-        _inventory.Dragging(eventData.position);
+        _dragController.Dragging(eventData.position);
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        Debug.Log($"드랍 ! {gameObject.name}", gameObject);
-
-        _inventory.Drop(_slotIndex);
+        _dragController.DropnItemView(_slotIndex);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        Debug.Log($"드래그 종료 ! {gameObject}", gameObject);
-
-        _inventory.EndDrag();
+        _dragController.EndDrag();
     }
 
     public void SetItemModel(ItemModel model)

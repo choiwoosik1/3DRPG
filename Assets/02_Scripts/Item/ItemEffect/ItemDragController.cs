@@ -94,4 +94,14 @@ public class ItemDragController : MonoBehaviour
         }
     }
 
+    public void DropOnEquipmentView(EquipSlotType slotType)
+    {
+        if (_selectedItemModel == null) return;
+
+        if(_selectedItemModel.GetIsEquippable(slotType) == true)
+        {
+            _inventory.UseItem(_selectedItemModel.SlotIndex);
+        }
+    }
+
 }
