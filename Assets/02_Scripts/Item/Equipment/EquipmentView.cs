@@ -15,16 +15,17 @@ public class EquipmentView : MonoBehaviour,
 {
     EquipController _equipController;
     Inventory _inventory;
+    ItemDragController _dragController;
 
     Equipment _equipMent;
 
     [SerializeField] EquipSlotType _slotType;
     [SerializeField] Image _iconImage;
 
-    public void Initialize(EquipController equipController, Inventory inventory)
+    public void Initialize(EquipController equipController, ItemDragController dragController)
     {
         _equipController = equipController;
-        _inventory = inventory;
+        _dragController = dragController;
     }
 
     public void SetEquipMent(Equipment equipment)
@@ -56,11 +57,14 @@ public class EquipmentView : MonoBehaviour,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        _dragController.SetTooltipPosition(transform.position); ;
         
+        if(_equipMent == null) return;
+        _dragController.ShowTooltip(_equipMent.ItemModel);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        _dragController.HideTooltip();
     }
 }

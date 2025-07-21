@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
 /// <summary>
@@ -12,9 +13,11 @@ public class EquipController : MonoBehaviour
 
     [SerializeField] HeroModel _heroModel;
     [SerializeField] Inventory _inventory;
+    [SerializeField] ItemDragController _dragController;
 
     [SerializeField] Transform[] _slotTransforms;       // 장비 슬롯 부모 트랜스폼
     [SerializeField] EquipmentView[] _equipmentViews;
+    
 
     /// <summary>
     /// 무기 장착 이벤트, Hit Point 전달
@@ -25,9 +28,17 @@ public class EquipController : MonoBehaviour
     {
         foreach(var equipmentView in _equipmentViews)
         {
-            equipmentView.Initialize(this, _inventory);
+            equipmentView.Initialize(this, _dragController);
             equipmentView.SetEquipMent(null);
         }
+    }
+
+    void SetEquipmentView(EquipSlotType slotType, Equipment equipment)
+    {
+        int slotIndex = (int)slotType;
+        if (slotIndex < 0 || slotIndex >= _equipmentViews.Length) return;
+
+        _equipmentViews[slotIndex].SetEquipMent(equipment);
     }
 
     /// <summary>
@@ -61,6 +72,8 @@ public class EquipController : MonoBehaviour
         {
             OnWeaponEquipped?.Invoke(weapon.HitPoint);
         }
+
+        SetEquipmentView(slotType, equipment);  
     }
 
     /// <summary>
@@ -93,6 +106,8 @@ public class EquipController : MonoBehaviour
             {
                 OnWeaponEquipped?.Invoke(null);
             }
+
+            SetEquipmentView(slotType, null);
         }
     }
 }

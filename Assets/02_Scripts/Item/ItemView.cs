@@ -13,13 +13,15 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 {
     Inventory _inventory;
     int _slotIndex;
+    ItemDragController _dragController;
 
     ItemModel _model;
     [SerializeField] Image _iconImage;
-    public void Initialize(Inventory inventory, int slotIndex)
+    public void Initialize(Inventory inventory, int slotIndex, ItemDragController dragController)
     {
         _inventory = inventory;
         _slotIndex = slotIndex;
+        _dragController = dragController;
     }
 
     /// <summary>
@@ -85,12 +87,13 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _inventory.ShowToolTip(_slotIndex);
+        _dragController.SetTooltipPosition(transform.position);
+        _dragController.ShowTooltip(_model);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _inventory.HideItemDescVIew();
+        _dragController.HideTooltip();
     }
 
     public void OnPointerClick(PointerEventData eventData)

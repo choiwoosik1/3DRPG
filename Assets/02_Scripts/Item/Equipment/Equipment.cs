@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum EquipSlotType
 {
+    None = -1,
     Helmet,
     Armor,
     Weapon,

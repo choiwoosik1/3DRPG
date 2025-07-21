@@ -21,8 +21,9 @@ public class Inventory : MonoBehaviour
     [SerializeField] ItemView[] _itemViews;
     [SerializeField] ItemView _selectedItemView;
     [SerializeField] HeroModel _heroModel;
-    [SerializeField] ItemDescription _itemDescView;
+    //[SerializeField] ItemDescription _itemDescView;
     [SerializeField] EquipController _equipContoller;
+    [SerializeField] ItemDragController _dragController;
 
     public EquipController EquipController => _equipContoller;
     public HeroModel HeroModel => _heroModel;
@@ -48,7 +49,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < _itemViews.Length; i++)
         {
-            _itemViews[i].Initialize(this, i);
+            _itemViews[i].Initialize(this, i, _dragController);
             _itemViews[i].SetItemModel(_itemModels[i]);
         }
 
@@ -87,7 +88,7 @@ public class Inventory : MonoBehaviour
         EndDrag();
 
         // 아이템 설명 뷰 강제 숨김
-        HideItemDescVIew();
+        //HideItemDescVIew();
     }
 
     /// <summary>
@@ -192,6 +193,8 @@ public class Inventory : MonoBehaviour
         }
     }
 
+
+
     /// <summary>
     /// 아이템을 사용하는 함수
     /// </summary>
@@ -256,7 +259,7 @@ public class Inventory : MonoBehaviour
         if (_selectedSlotIndex < 0) return;
 
         _selectedItemView.transform.position = pos;
-        HideItemDescVIew();
+        //HideItemDescVIew();
     }
 
     public void Drop(int slotIndex)
@@ -264,7 +267,7 @@ public class Inventory : MonoBehaviour
         if (_selectedSlotIndex < 0) return;
 
         SwapItems(_selectedSlotIndex, slotIndex);
-        ShowToolTip(slotIndex);
+        //ShowToolTip(slotIndex);
     }
 
     public void EndDrag()
@@ -280,26 +283,26 @@ public class Inventory : MonoBehaviour
     /// 아이템 설명 뷰(툴팁)을 표시하는 함수
     /// </summary>
     /// <param name="slotIndex">표시할 아이템 슬롯 번호</param>
-    public void ShowToolTip(int slotIndex)
-    {
-        if (slotIndex < 0 || slotIndex >= _itemModels.Length) return;
+    //public void ShowToolTip(int slotIndex)
+    //{
+    //    if (slotIndex < 0 || slotIndex >= _itemModels.Length) return;
 
-        // 표시할 아이템 모델 찾기
-        ItemModel itemModel = _itemModels[slotIndex];
-        if (itemModel == null) return;
+    //    // 표시할 아이템 모델 찾기
+    //    ItemModel itemModel = _itemModels[slotIndex];
+    //    if (itemModel == null) return;
 
-        _itemDescView.SetItemModel(itemModel);
-        _itemDescView.transform.position = _itemViews[slotIndex].transform.position;
-        _itemDescView.gameObject.SetActive(true);
-    }
+    //    //_itemDescView.SetItemModel(itemModel);
+    //    //_itemDescView.transform.position = _itemViews[slotIndex].transform.position;
+    //    //_itemDescView.gameObject.SetActive(true);
+    //}
     
     /// <summary>
     /// 아이템 설명 뷰(툴팁)를 숨기는 함수
     /// </summary>
-    public void HideItemDescVIew()
-    {
-        _itemDescView.gameObject.SetActive(false);
-    }
+    //public void HideItemDescVIew()
+    //{
+    //    //_itemDescView.gameObject.SetActive(false);
+    //}
 
     // 테스트
     private void Update()
@@ -327,6 +330,11 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F5))
         {
             AddItem("Rings");
+        }
+
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            AddItem("Sword");
         }
     }
 }

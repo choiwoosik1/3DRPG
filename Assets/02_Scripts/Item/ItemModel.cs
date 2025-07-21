@@ -15,6 +15,8 @@ public class ItemModel
     public ItemConfig Config => _config;
     public ItemType ItemType => _config.ItemType;
     public int SlotIndex => _slotIndex;
+    public virtual EquipSlotType EquipSlotType => EquipSlotType.None;
+
     public ItemModel(ItemConfig config)
     {
         _config = config;
