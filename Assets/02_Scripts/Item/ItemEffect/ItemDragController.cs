@@ -87,7 +87,7 @@ public class ItemDragController : MonoBehaviour
                 _inventory.SwapItems(_selectedItemModel.SlotIndex, slotIndex);
             }
         }
-        // 드래그 중인 아이템이 장착중인 아잍템이 아니었으면(인벤토리에 있는 아이템이었으면)
+        // 드래그 중인 아이템이 장착중인 아이템이 아니었으면(인벤토리에 있는 아이템이었으면)
         else
         {
             _inventory.SwapItems(_selectedItemModel.SlotIndex, slotIndex);

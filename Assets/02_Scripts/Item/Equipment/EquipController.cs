@@ -75,7 +75,7 @@ public class EquipController : MonoBehaviour
 
         itemModel.SetIsEquipped(true);
 
-        SetEquipmentView(slotType, equipment);  
+        SetEquipmentView(slotType, equipment);
     }
 
     /// <summary>
