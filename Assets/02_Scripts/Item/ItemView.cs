@@ -13,15 +13,14 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 {
     Inventory _inventory;
     int _slotIndex;
-    ItemDragController _dragController;
+    InventoryPresenter _presenter;
 
     ItemModel _model;
     [SerializeField] Image _iconImage;
-    public void Initialize(Inventory inventory, int slotIndex, ItemDragController dragController)
+    public void Initialize(InventoryPresenter presenter, int slotIndex)
     {
-        _inventory = inventory;
+        _presenter = presenter;
         _slotIndex = slotIndex;
-        _dragController = dragController;
     }
 
     /// <summary>
@@ -38,28 +37,28 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
 
-        _dragController.BeginDrag(_model);
+        _presenter.BeginDrag(_model);
     }
     
     public void OnDrag(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        _dragController.Dragging(eventData.position);
+        _presenter.Dragging(eventData.position);
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        _dragController.DropnItemView(_slotIndex);
+        _presenter.DropnItemView(_slotIndex);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        _dragController.EndDrag();
+        _presenter.EndDrag();
     }
 
     public void SetItemModel(ItemModel model)
@@ -79,13 +78,13 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _dragController.SetTooltipPosition(transform.position);
-        _dragController.ShowTooltip(_model);
+        _presenter.SetTooltipPosition(transform.position);
+        _presenter.ShowTooltip(_model);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _dragController.HideTooltip();
+        _presenter.HideTooltip();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -94,7 +93,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (eventData.button != PointerEventData.InputButton.Right) return;
 
         Debug.Log($"클릭 ! {gameObject.name}", gameObject);
-        _inventory.UseItem(_slotIndex);
+        _presenter.UseItem(_slotIndex);
 
         
     }

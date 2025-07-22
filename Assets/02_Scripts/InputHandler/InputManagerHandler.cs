@@ -26,10 +26,10 @@ public class InputManagerHandler : InputHandler
         _moveInput.x = Input.GetAxisRaw("Horizontal");
         _moveInput.y = Input.GetAxisRaw("Vertical");
 
-        _cameraRotInput.x = Input.GetAxisRaw("Mouse X");
-        _cameraRotInput.y = Input.GetAxisRaw("Mouse Y");
+        _cameraRotInput.x = Input.GetAxis("Mouse X");
+        _cameraRotInput.y = Input.GetAxis("Mouse Y");
 
-        _cameraZoomInput = Input.GetAxisRaw("Mouse ScrollWheel");
+        _cameraZoomInput = Input.GetAxis("Mouse ScrollWheel");
 
         // 입력 이벤트들 발생
         OnMoveInput?.Invoke(_moveInput);

@@ -12,11 +12,16 @@ public class PlayScene : MonoBehaviour
     [SerializeField] Hero _hero;
     [SerializeField] CameraController _cameraController;
     [SerializeField] Inventory _inventory;
+    [SerializeField] InventoryPresenter _presenter;
 
     // InputHandler의 이벤트 알림을 구독해서 Hero가 움직이도록
     void Start()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
+
+        _inventory.Initialize();
+        _presenter.Initialize();
+
+        Cursor.lockState = CursorLockMode.Locked;
 
         // 이동 입력 이벤트 구독
         _inputHandler.OnMoveInput += OnMoveInput;
@@ -36,8 +41,17 @@ public class PlayScene : MonoBehaviour
         // 질주 입력 이벤트 구독
         _inputHandler.OnSprintInput += _hero.SetSprintActive;
 
+        // 인벤토리 메뉴 여닫기 입력 이벤트 구독
+        _inputHandler.OnInventoryInput += _presenter.Toggle;
+
         // 인벤토리 메뉴 여닫기 이벤트 구독
-        _inputHandler.OnInventoryInput += _inventory.Toggle;
+        _presenter.OnToggled += OnInventoryToggled;
+    }
+
+    void OnInventoryToggled(bool hasOpened)
+    {
+        Time.timeScale = hasOpened ? 0 : 1.0f;
+        Cursor.lockState = hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
     }
 
     /// <summary>

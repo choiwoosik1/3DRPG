@@ -85,7 +85,8 @@ public class EquipmentItemModel : ItemModel
 
     public Equipment EquipmentPrefab => _equipmentPrefab;
     public override EquipSlotType EquipSlotType => _equipmentPrefab.EquipSlotType;
-    
+    public override bool IsEquipped => _isEquipped;
+
 
     public EquipmentItemModel(EquipmentItemConfig config) : base(config)
     {

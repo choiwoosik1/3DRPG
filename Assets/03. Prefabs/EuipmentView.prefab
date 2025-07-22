@@ -240,5 +240,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4c2b6f6c6cbf347a2dba06d7f8bf6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotType: 0
+  _slotType: -1
   _iconImage: {fileID: 3421511479852025211}

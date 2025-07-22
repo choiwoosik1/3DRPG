@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -18,42 +19,28 @@ public class Inventory : MonoBehaviour
     Dictionary<string, ItemConfig> _itemConfigMap = new();
 
     [Header("---- 컴포넌트 참조 ----")]
-    [SerializeField] ItemView[] _itemViews;
-    [SerializeField] ItemView _selectedItemView;
-    [SerializeField] HeroModel _heroModel;
+    //[SerializeField] ItemView[] _itemViews;
+    //[SerializeField] ItemView _selectedItemView;
     //[SerializeField] ItemDescription _itemDescView;
+    //[SerializeField] ItemDragController _dragController;
+    [SerializeField] HeroModel _heroModel;
     [SerializeField] EquipController _equipContoller;
-    [SerializeField] ItemDragController _dragController;
 
     public EquipController EquipController => _equipContoller;
     public HeroModel HeroModel => _heroModel;
 
+    // 슬롯 변경 이벤트
+    public event Action<int, ItemModel> OnSlotChanged;
+
     // 유저가 보유하고 있는 아이템 배열   
     ItemModel[] _itemModels = new ItemModel[_slotCount];
 
-    // 현재 선택 중인 슬롯 번호
-    int _selectedSlotIndex = -1;
-
-    // 현재 인벤토리 메뉴가 열려있는지 여부
-    bool _hasOpened = false;
-
-    private void Awake()
+    public void Initialize()
     {
         foreach (var itemConfig in _itemConfigs)
         {
             _itemConfigMap[itemConfig.Id] = itemConfig;
         }
-    }
-
-    private void Start()
-    {
-        for (int i = 0; i < _itemViews.Length; i++)
-        {
-            _itemViews[i].Initialize(this, i, _dragController);
-            _itemViews[i].SetItemModel(_itemModels[i]);
-        }
-
-        _equipContoller.Initialize();
     }
 
     /// <summary>
@@ -73,25 +60,6 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// 인벤토리 메뉴를 여닫는 함수
-    /// </summary>
-    public void Toggle()
-    {
-        _hasOpened = !_hasOpened;
-        gameObject.SetActive(_hasOpened);
-
-        // 삼항 연산
-        Time.timeScale = _hasOpened ? 0 : 1;
-        Cursor.lockState = _hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
-
-        // 드래그 상태에서 인벤토리를 껐을 때 오류 생길 수 있음 방지
-        EndDrag();
-
-        // 아이템 설명 뷰 강제 숨김
-        //HideItemDescVIew();
-    }
-
-    /// <summary>
     /// 슬롯 번호로 아이템 모델을 반환을 시도하는 함수
     /// </summary>
     /// <param name="slotIndex">슬롯 번호</param>
@@ -102,7 +70,7 @@ public class Inventory : MonoBehaviour
         itemModel = null;
 
         // 인덱스 범위 검사
-        if (slotIndex < 0 || slotIndex >= _itemViews.Length) return false;
+        if (slotIndex < 0 || slotIndex >= _itemModels.Length) return false;
 
         itemModel = _itemModels[slotIndex];
         return itemModel != null;
@@ -115,7 +83,7 @@ public class Inventory : MonoBehaviour
     /// <returns></returns>
     public bool GetIsEmptySlot(int slotIndex)
     {
-        if (slotIndex < 0 || slotIndex >= _itemViews.Length)
+        if (slotIndex < 0 || slotIndex >= _itemModels.Length)
             return false;
 
         ItemModel itemModel = _itemModels[slotIndex];
@@ -147,8 +115,8 @@ public class Inventory : MonoBehaviour
                 // 아이템 획득 시 실행되어야 하는 함수 호출
                 _itemModels[i].Acquire(this, i);
 
-                // 아이템 뷰에 아이템 모델 설정
-                _itemViews[i].SetItemModel(_itemModels[i]);
+                // 슬롯 변경 이벤트 발행
+                OnSlotChanged?.Invoke(i, _itemModels[i]);
                 return;
             }
         }
@@ -169,7 +137,7 @@ public class Inventory : MonoBehaviour
             {
                 _itemModels[i] = itemModel;
                 itemModel.SetSlotIndex(i);
-                _itemViews[i].SetItemModel(itemModel);
+                OnSlotChanged?.Invoke(i, itemModel);
                 return true;
             }
         }
@@ -188,7 +156,7 @@ public class Inventory : MonoBehaviour
         {
             itemModel.Remove();
             _itemModels[slotIndex] = null;
-            _itemViews[slotIndex].SetItemModel(_itemModels[slotIndex]);
+            OnSlotChanged?.Invoke(slotIndex, null);
          
         }
     }
@@ -228,81 +196,9 @@ public class Inventory : MonoBehaviour
         _itemModels[a]?.SetSlotIndex(a);
         _itemModels[b]?.SetSlotIndex(b);
 
-        // 자리 바꾼 번호에 해당하는 ItemView 갱신
-        _itemViews[a].SetItemModel(_itemModels[a]);
-        _itemViews[b].SetItemModel(_itemModels[b]);
+        OnSlotChanged?.Invoke(a, _itemModels[a]);
+        OnSlotChanged?.Invoke(b, _itemModels[b]);
     }
-
-    public void BeginDrag(int slotIndex)
-    {
-        ItemModel item = _itemModels[slotIndex];
-
-        // 해당 슬롯 번호에 아이템이 있는 경우
-        if (item != null)
-        {
-            _selectedSlotIndex = slotIndex;
-            _itemViews[_selectedSlotIndex].Hide(true);
-            _selectedItemView.SetItemModel(item);
-            _selectedItemView.gameObject.SetActive(true);
-        }
-
-        // 해당 슬롯 번호에 아이템이 없는 경우
-        else
-        {
-            _selectedSlotIndex = -1;
-            _selectedItemView.gameObject.SetActive(false);
-        }
-    }
-
-    public void Dragging(Vector2 pos)
-    {
-        if (_selectedSlotIndex < 0) return;
-
-        _selectedItemView.transform.position = pos;
-        //HideItemDescVIew();
-    }
-
-    public void Drop(int slotIndex)
-    {
-        if (_selectedSlotIndex < 0) return;
-
-        SwapItems(_selectedSlotIndex, slotIndex);
-        //ShowToolTip(slotIndex);
-    }
-
-    public void EndDrag()
-    {
-        _selectedItemView.gameObject.SetActive(false);
-
-        if (_selectedSlotIndex < 0) return;
-        _itemViews[_selectedSlotIndex].Hide(false);
-        _selectedSlotIndex = -1;
-    }
-
-    /// <summary>
-    /// 아이템 설명 뷰(툴팁)을 표시하는 함수
-    /// </summary>
-    /// <param name="slotIndex">표시할 아이템 슬롯 번호</param>
-    //public void ShowToolTip(int slotIndex)
-    //{
-    //    if (slotIndex < 0 || slotIndex >= _itemModels.Length) return;
-
-    //    // 표시할 아이템 모델 찾기
-    //    ItemModel itemModel = _itemModels[slotIndex];
-    //    if (itemModel == null) return;
-
-    //    //_itemDescView.SetItemModel(itemModel);
-    //    //_itemDescView.transform.position = _itemViews[slotIndex].transform.position;
-    //    //_itemDescView.gameObject.SetActive(true);
-    //}
-    
-    /// <summary>
-    /// 아이템 설명 뷰(툴팁)를 숨기는 함수
-    /// </summary>
-    //public void HideItemDescVIew()
-    //{
-    //    //_itemDescView.gameObject.SetActive(false);
-    //}
 
     // 테스트
     private void Update()
@@ -337,4 +233,31 @@ public class Inventory : MonoBehaviour
             AddItem("Sword");
         }
     }
+
+
+    /// <summary>
+    /// 아이템 설명 뷰(툴팁)을 표시하는 함수
+    /// </summary>
+    /// <param name="slotIndex">표시할 아이템 슬롯 번호</param>
+    //public void ShowToolTip(int slotIndex)
+    //{
+    //    if (slotIndex < 0 || slotIndex >= _itemModels.Length) return;
+
+    //    // 표시할 아이템 모델 찾기
+    //    ItemModel itemModel = _itemModels[slotIndex];
+    //    if (itemModel == null) return;
+
+    //    //_itemDescView.SetItemModel(itemModel);
+    //    //_itemDescView.transform.position = _itemViews[slotIndex].transform.position;
+    //    //_itemDescView.gameObject.SetActive(true);
+    //}
+
+    /// <summary>
+    /// 아이템 설명 뷰(툴팁)를 숨기는 함수
+    /// </summary>
+    //public void HideItemDescVIew()
+    //{
+    //    //_itemDescView.gameObject.SetActive(false);
+    //}
+
 }

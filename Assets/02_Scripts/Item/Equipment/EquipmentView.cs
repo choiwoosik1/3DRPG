@@ -14,19 +14,16 @@ public class EquipmentView : MonoBehaviour,
     IPointerClickHandler,
     IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
-    EquipController _equipController;
-    Inventory _inventory;
-    ItemDragController _dragController;
-
+    InventoryPresenter _presenter;
+    
     Equipment _equipMent;
 
     [SerializeField] EquipSlotType _slotType;
     [SerializeField] Image _iconImage;
 
-    public void Initialize(EquipController equipController, ItemDragController dragController)
+    public void Initialize(InventoryPresenter presenter)
     {
-        _equipController = equipController;
-        _dragController = dragController;
+        _presenter = presenter;
     }
 
     public void SetEquipMent(Equipment equipment)
@@ -46,27 +43,27 @@ public class EquipmentView : MonoBehaviour,
 
     public void Hide(bool isHidden)
     {
-        _iconImage.enabled = isHidden;
+        _iconImage.enabled = !isHidden;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Right) return;
 
-        _equipController.UnEquip(_slotType);
+        _presenter.UnequipEquipment(_slotType);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _dragController.SetTooltipPosition(transform.position); ;
+        _presenter.SetTooltipPosition(transform.position); ;
         
         if(_equipMent == null) return;
-        _dragController.ShowTooltip(_equipMent.ItemModel);
+        _presenter.ShowTooltip(_equipMent.ItemModel);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _dragController.HideTooltip();
+        _presenter.HideTooltip();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -75,27 +72,27 @@ public class EquipmentView : MonoBehaviour,
 
         if (_equipMent == null) return;
 
-        _dragController.BeginDrag(_equipMent.ItemModel);
+        _presenter.BeginDrag(_equipMent.ItemModel);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        _dragController.Dragging(eventData.position);
+        _presenter.Dragging(eventData.position);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        _dragController.EndDrag();
+        _presenter.EndDrag();
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        _dragController.DropOnEquipmentView(_slotType);
+        _presenter.DropOnEquipmentView(_slotType);
     }
 }

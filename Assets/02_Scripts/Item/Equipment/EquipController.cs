@@ -13,10 +13,9 @@ public class EquipController : MonoBehaviour
 
     [SerializeField] HeroModel _heroModel;
     [SerializeField] Inventory _inventory;
-    [SerializeField] ItemDragController _dragController;
 
     [SerializeField] Transform[] _slotTransforms;       // 장비 슬롯 부모 트랜스폼
-    [SerializeField] EquipmentView[] _equipmentViews;
+    //[SerializeField] EquipmentView[] _equipmentViews;
     
 
     /// <summary>
@@ -24,21 +23,23 @@ public class EquipController : MonoBehaviour
     /// </summary>
     public event Action<Transform> OnWeaponEquipped;
 
-    public void Initialize()
-    {
-        foreach(var equipmentView in _equipmentViews)
-        {
-            equipmentView.Initialize(this, _dragController);
-            equipmentView.SetEquipMent(null);
-        }
-    }
+    /// <summary>
+    /// 슬롯 변경 이벤트
+    /// </summary>
+    public event Action<EquipSlotType, Equipment> OnSlotChanged;
 
-    void SetEquipmentView(EquipSlotType slotType, Equipment equipment)
+    /// <summary>
+    /// slotType으로 장비 반환을 시도하는 함수
+    /// </summary>
+    /// <param name="slotType"></param>
+    /// <param name="equipment"></param>
+    /// <returns></returns>
+    public bool TryGetEquipment(EquipSlotType slotType, out Equipment equipment)
     {
-        int slotIndex = (int)slotType;
-        if (slotIndex < 0 || slotIndex >= _equipmentViews.Length) return;
+        equipment = null;
 
-        _equipmentViews[slotIndex].SetEquipMent(equipment);
+        // Dictionary에 slotType이 있으면 true와 equipment(지금 끼고 있는 장비) 반환
+        return _equipmentMap.TryGetValue(slotType, out equipment);
     }
 
     /// <summary>
@@ -53,7 +54,7 @@ public class EquipController : MonoBehaviour
         if (slotIndex < 0 || slotIndex >= _slotTransforms.Length) return;
 
         // 기존 장비가 있었다면 해제
-        UnEquip(slotType);
+        Unequip(slotType);
 
         // 장비 프리펩 생성
         Transform slotTransform = _slotTransforms[slotIndex];
@@ -75,14 +76,15 @@ public class EquipController : MonoBehaviour
 
         itemModel.SetIsEquipped(true);
 
-        SetEquipmentView(slotType, equipment);
+        // 슬롯 변경 이벤트 발행
+        OnSlotChanged?.Invoke(slotType, equipment);
     }
 
     /// <summary>
     /// 장비를 해제하는 함수
     /// </summary>
     /// <param name="slotType"></param>
-    public void UnEquip(EquipSlotType slotType)
+    public void Unequip(EquipSlotType slotType)
     {
         if (_equipmentMap.ContainsKey(slotType))
         {
@@ -112,8 +114,8 @@ public class EquipController : MonoBehaviour
 
             itemModel.SetIsEquipped(false);
 
-            // 6. 장비 ㅅㄹ롯 뷰 갱신
-            SetEquipmentView(slotType, null);
+            // 6. 슬롯 변경 이벤트 발행
+            OnSlotChanged?.Invoke(slotType, null);
         }
     }
 
@@ -123,7 +125,7 @@ public class EquipController : MonoBehaviour
         {
             if(_equipmentMap[itemModel.EquipSlotType].ItemModel == itemModel)
             {
-                UnEquip(itemModel.EquipSlotType);
+                Unequip(itemModel.EquipSlotType);
             }
         }
     }
