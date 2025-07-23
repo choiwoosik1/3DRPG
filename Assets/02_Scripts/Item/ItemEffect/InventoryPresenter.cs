@@ -74,11 +74,15 @@ public class InventoryPresenter : MonoBehaviour
     public void UseItem(int slotIndex)
     {
         _inventory.UseItem(slotIndex);
+
+        ShowTooltip(slotIndex);
     }
     
     public void UnequipEquipment(EquipSlotType slotType)
     {
         _equipController.Unequip(slotType);
+
+        ShowTooltip(slotType);
     }
 
     /// <summary>
@@ -116,16 +120,44 @@ public class InventoryPresenter : MonoBehaviour
         _tooltipView.transform.position = pos;
     }
 
-    /// <summary>
-    /// 툴팁을 보여주는 함수
-    /// </summary>
-    /// <param name="itemModel"></param>
-    public void ShowTooltip(ItemModel itemModel)
-    {
-        if (itemModel == null) return;
+    ///// <summary>
+    ///// 툴팁을 보여주는 함수
+    ///// </summary>
+    ///// <param name="itemModel"></param>
+    //public void ShowTooltip(ItemModel itemModel)
+    //{
+    //    if (itemModel == null) return;
 
-        _tooltipView.SetItemModel(itemModel);
-        _tooltipView.gameObject.SetActive(true);
+    //    _tooltipView.SetItemModel(itemModel);
+    //    _tooltipView.gameObject.SetActive(true);
+    //}
+
+    public void ShowTooltip(int slotIndex)
+    {
+        _inventory.TryGetItemModel(slotIndex, out ItemModel itemModel);
+        if(itemModel != null)
+        {
+            _tooltipView.SetItemModel(itemModel);
+            _tooltipView.gameObject.SetActive(true);
+        }
+        else
+        {
+            _tooltipView.gameObject.SetActive(false);
+        }
+    }
+
+    public void ShowTooltip(EquipSlotType slotType)
+    {
+        _equipController.TryGetEquipment(slotType, out Equipment equipment);
+        if(equipment != null)
+        {
+            _tooltipView.SetItemModel(equipment.ItemModel);
+            _tooltipView.gameObject.SetActive(true);
+        }
+        else
+        {
+            _tooltipView.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -182,6 +214,8 @@ public class InventoryPresenter : MonoBehaviour
         {
             _inventory.SwapItems(_selectedItemModel.SlotIndex, slotIndex);
         }
+
+        ShowTooltip(slotIndex);
     }
 
     public void DropOnEquipmentView(EquipSlotType slotType)
@@ -192,6 +226,8 @@ public class InventoryPresenter : MonoBehaviour
         {
             _inventory.UseItem(_selectedItemModel.SlotIndex);
         }
+
+        ShowTooltip(slotType);
     }
 
 }

@@ -58,7 +58,7 @@ public class EquipmentView : MonoBehaviour,
         _presenter.SetTooltipPosition(transform.position); ;
         
         if(_equipMent == null) return;
-        _presenter.ShowTooltip(_equipMent.ItemModel);
+        _presenter.ShowTooltip(_slotType);
     }
 
     public void OnPointerExit(PointerEventData eventData)

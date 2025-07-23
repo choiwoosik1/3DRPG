@@ -79,7 +79,7 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnPointerEnter(PointerEventData eventData)
     {
         _presenter.SetTooltipPosition(transform.position);
-        _presenter.ShowTooltip(_model);
+        _presenter.ShowTooltip(_slotIndex);
     }
 
     public void OnPointerExit(PointerEventData eventData)

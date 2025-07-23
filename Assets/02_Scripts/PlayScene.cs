@@ -13,13 +13,14 @@ public class PlayScene : MonoBehaviour
     [SerializeField] CameraController _cameraController;
     [SerializeField] Inventory _inventory;
     [SerializeField] InventoryPresenter _presenter;
+    [SerializeField] DialogueSystem _dialogueSystem;
 
     // InputHandler의 이벤트 알림을 구독해서 Hero가 움직이도록
     void Start()
     {
-
         _inventory.Initialize();
         _presenter.Initialize();
+        _dialogueSystem.Initialize();
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -46,11 +47,19 @@ public class PlayScene : MonoBehaviour
 
         // 인벤토리 메뉴 여닫기 이벤트 구독
         _presenter.OnToggled += OnInventoryToggled;
+
+
+        _dialogueSystem.OnToggled += OnDialogueToggled;
     }
 
     void OnInventoryToggled(bool hasOpened)
     {
         Time.timeScale = hasOpened ? 0 : 1.0f;
+        Cursor.lockState = hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
+    }
+
+    void OnDialogueToggled(bool hasOpened)
+    {
         Cursor.lockState = hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
     }
 
