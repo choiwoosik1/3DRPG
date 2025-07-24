@@ -55,8 +55,18 @@ public class DialoguePresenter : MonoBehaviour
     /// </summary>
     public void Next()
     {
-        _lineIndex++;
-        PlayCurrentLine();
+        // _view가 아직 대사를 출력 중이면
+        if(_view.IsPlaying == true)
+        {
+            _view.EndSpeech();
+        }
+        
+        // _view가 대사 출력을 다 했으면
+        else
+        {
+            _lineIndex++;
+            PlayCurrentLine();
+        }
     }
 
     /// <summary>
@@ -74,9 +84,10 @@ public class DialoguePresenter : MonoBehaviour
                     _view.SetNameText(str);
                     break;
                 default:
-                    if (_typingCoroutine != null)
-                        StopCoroutine(_typingCoroutine);
-                    _typingCoroutine = StartCoroutine(TypeText(str));
+                    _view.beginspeech(str);
+                    //if (_typingCoroutine != null)
+                    //    StopCoroutine(_typingCoroutine);
+                    //_typingCoroutine = StartCoroutine(TypeText(str));
                     break;
             }
 
@@ -105,12 +116,15 @@ public class DialoguePresenter : MonoBehaviour
 
         for(int i = 0; i< _commandWords.Length; i++)
         {
+            // 대사 한 줄이 명령어로 시작하는 경우
             if(line.StartsWith(_commandWords[i]) == true)
             {
+                // 대사 한 줄이 명령어와 동일한 경우
                 if(line.Length == _commandWords[i].Length)
                 {
                     str = string.Empty;
                 }
+                // 대사 한 줄이 명령어와 동일하지 않은 경우
                 else
                 {
                     // Substring: 매개변수 부터 끝까지
@@ -123,13 +137,13 @@ public class DialoguePresenter : MonoBehaviour
         return LineCommandType.Speech;
     }
 
-    IEnumerator TypeText(string sentence)
-    {
-        _view.SetSpeechText(string.Empty); // 기존 텍스트 초기화
-        foreach (char c in sentence)
-        {
-            _view.AppendSpeechChar(c); // 글자 추가
-            yield return new WaitForSeconds(0.05f); // 0.05초 텀
-        }
-    }
+    //IEnumerator TypeText(string sentence)
+    //{
+    //    _view.SetSpeechText(string.Empty); // 기존 텍스트 초기화
+    //    foreach (char c in sentence)
+    //    {
+    //        _view.AppendSpeechChar(c); // 글자 추가
+    //        yield return new WaitForSeconds(0.05f); // 0.05초 텀
+    //    }
+    //}
 }

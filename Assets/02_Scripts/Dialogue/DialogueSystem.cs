@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 /// <summary>
@@ -41,6 +42,20 @@ public class DialogueSystem : MonoBehaviour
             _presenter.Play(model);
             OnToggled?.Invoke(_isPlaying);
         }
+    }
+
+    /// <summary>
+    /// 대화 모델로 대화를 재생하는 함수
+    /// </summary>
+    /// <param name="model"></param>
+    public void PlayDialogue(DialogueModel model)
+    {
+        if(_isPlaying == true) return;
+        if (model == null) return;
+
+        _isPlaying = true;
+        _presenter.Play(model);
+        OnToggled?.Invoke(_isPlaying);
     }
 
     void EndDialogue()
