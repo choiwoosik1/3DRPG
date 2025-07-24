@@ -14,13 +14,23 @@ public class DialogueView : MonoBehaviour
 
     string _speech;
 
-    public void BeginSpeech(string speech)
-    {
-        _speechText.text = speech;
-    }
+    //public void BeginSpeech(string speech)
+    //{
+    //    _speechText.text = speech;
+    //}
 
     public void SetNameText(string name)
     {
         _nameText.text = name;
+    }
+
+    public void SetSpeechText(string text)
+    {
+        _speechText.text = text;
+    }
+
+    public void AppendSpeechChar(char c)
+    {
+        _speechText.text += c;
     }
 }

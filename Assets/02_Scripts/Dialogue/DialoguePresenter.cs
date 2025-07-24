@@ -15,6 +15,8 @@ public class DialoguePresenter : MonoBehaviour
     [SerializeField] string[] _commandWords;            // 명령어 배열
     [SerializeField] DialogueView _view;
 
+    Coroutine _typingCoroutine;
+
     DialogueModel _model;
     int _lineIndex = 0;
 
@@ -72,7 +74,9 @@ public class DialoguePresenter : MonoBehaviour
                     _view.SetNameText(str);
                     break;
                 default:
-                    _view.BeginSpeech(str);
+                    if (_typingCoroutine != null)
+                        StopCoroutine(_typingCoroutine);
+                    _typingCoroutine = StartCoroutine(TypeText(str));
                     break;
             }
 
@@ -117,5 +121,15 @@ public class DialoguePresenter : MonoBehaviour
             }
         }
         return LineCommandType.Speech;
+    }
+
+    IEnumerator TypeText(string sentence)
+    {
+        _view.SetSpeechText(string.Empty); // 기존 텍스트 초기화
+        foreach (char c in sentence)
+        {
+            _view.AppendSpeechChar(c); // 글자 추가
+            yield return new WaitForSeconds(0.05f); // 0.05초 텀
+        }
     }
 }

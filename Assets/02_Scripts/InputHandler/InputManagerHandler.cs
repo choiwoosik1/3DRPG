@@ -56,7 +56,7 @@ public class InputManagerHandler : InputHandler
             OnSprintInput?.Invoke(false);
         }
 
-        if (Input.GetButton("Inventory"))
+        if (Input.GetButtonDown("Inventory"))
         {
             OnInventoryInput?.Invoke();
         }
