@@ -48,18 +48,29 @@ public class PlayScene : MonoBehaviour
         // 인벤토리 메뉴 여닫기 이벤트 구독
         _presenter.OnToggled += OnInventoryToggled;
 
-
+        // 대화창 여닫기 이벤트 구독
         _dialogueSystem.OnToggled += OnDialogueToggled;
     }
 
     void OnInventoryToggled(bool hasOpened)
     {
+        
         Time.timeScale = hasOpened ? 0 : 1.0f;
         Cursor.lockState = hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
     }
 
     void OnDialogueToggled(bool hasOpened)
     {
+        if (hasOpened)
+        {
+            _inputHandler.OnMoveInput -= OnMoveInput;
+            _inputHandler.OnAttackInput -= _hero.Attack;
+        }
+        else
+        {
+            _inputHandler.OnMoveInput += OnMoveInput;
+            _inputHandler.OnAttackInput += _hero.Attack;
+        }
         Cursor.lockState = hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
     }
 
