@@ -8,6 +8,8 @@ public enum LineCommandType
 {
     Speech = -1,
     Name,
+    FlagOn,
+    FlagOff
 }
 
 public class DialoguePresenter : MonoBehaviour
@@ -82,6 +84,12 @@ public class DialoguePresenter : MonoBehaviour
             {
                 case LineCommandType.Name:
                     _view.SetNameText(str);
+                    break;
+                case LineCommandType.FlagOn:
+                    EventBus.AddFlag(str);
+                    break;
+                case LineCommandType.FlagOff:
+                    EventBus.RemoveFlag(str);
                     break;
                 default:
                     _view.beginspeech(str);

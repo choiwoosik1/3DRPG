@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NPC : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class NPC : MonoBehaviour
 
     [Header("---- 설정 데이터 ----")]
     [SerializeField] DialogueConfig[] _configs;             // 대화 설정 데이터 배열
+    [SerializeField] LayerMask _playerLayerMask;
+    [SerializeField] Image _interactImage;
 
     List<DialogueConfig> _sortedConfigs;                    // 우선순위 내림차순으로 정렬된 대화 설정 데이터 리스트
 
@@ -45,17 +48,23 @@ public class NPC : MonoBehaviour
 
             if(requiredPassed && hiddenPassed)
             {
-                // DialogueSystem 찾기
-                DialogueSystem dialogueSystem = FindObjectOfType<DialogueSystem>();
-
                 // DialogueModel 생성
                 DialogueModel model = new DialogueModel(config);
-
-                // 대화 재생
-                dialogueSystem.PlayDialogue(model);
+                
+                // 대화 재생 이벤트 발행
+                EventBus.PlayDialogue(model);
                 return;
             }
         }
+    }
+
+    void PlayerScan()
+    {
+        // 플레이어랑 NPC사이의 선 그려서 일정 거리 안에 있으면(RayCast)
+        
+
+        // InteractImage 키고, 대화 재생
+        
     }
 
     // 테스트용 치트키

@@ -29,6 +29,15 @@ public class DialogueSystem : MonoBehaviour
 
         // 대화 재생 종료 이벤트 구독
         _presenter.OnEnded += EndDialogue;
+
+        // Global 대화 재생 이벤트 구독
+        EventBus.OnPlayDialogue += PlayDialogue;
+    }
+
+    private void OnDestroy()
+    {
+        // 반드시 구독 해제
+        EventBus.OnPlayDialogue -= PlayDialogue;
     }
 
     void PlayDialogue(string id)

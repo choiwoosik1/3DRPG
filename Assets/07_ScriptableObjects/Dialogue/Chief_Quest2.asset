@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9795df6fd69212c4fa7a60ae4bbe284d, type: 3}
+  m_Name: Chief_Quest2
+  m_EditorClassIdentifier: 
+  _id: Chief_Quest2
+  _priority: 1
+  _requireFlag: Chief_Quest1
+  _hiddenFlag: 
+  _content: "\uC774\uB984#\uCD0C\uC7A5\n\uB291\uB300\uB4E4\uC740 \uB9C8\uC744 \uBC16\uC5D0\uC11C
+    \uC27D\uAC8C \uBC1C\uACAC\uD560 \uC218 \uC788\uC744 \uAC81\uB2C8\uB2E4.\n\uC774\uB984#\n(\uADF8\uB798\uC11C
+    \uB098\uBCF4\uACE0 \uC5B4\uCA4C\uB77C\uB294 \uAC78\uAE4C....)"

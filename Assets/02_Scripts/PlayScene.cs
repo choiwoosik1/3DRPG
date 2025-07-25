@@ -15,6 +15,9 @@ public class PlayScene : MonoBehaviour
     [SerializeField] InventoryPresenter _presenter;
     [SerializeField] DialogueSystem _dialogueSystem;
 
+    // inputLock 여부
+    bool _isInputLocked = false;
+
     // InputHandler의 이벤트 알림을 구독해서 Hero가 움직이도록
     void Start()
     {
@@ -34,10 +37,10 @@ public class PlayScene : MonoBehaviour
         _inputHandler.OnCameraZoomInput += _cameraController.Zoom;
 
         // 공격 입력 이벤트 구독
-        _inputHandler.OnAttackInput += _hero.Attack;
+        _inputHandler.OnAttackInput += OnAttackInput;
 
         // 점프 입력 이벤트 구독
-        _inputHandler.OnJumpInput += _hero.Jump;
+        _inputHandler.OnJumpInput += OnJumpInput;
 
         // 질주 입력 이벤트 구독
         _inputHandler.OnSprintInput += _hero.SetSprintActive;
@@ -54,25 +57,17 @@ public class PlayScene : MonoBehaviour
 
     void OnInventoryToggled(bool hasOpened)
     {
-        
         Time.timeScale = hasOpened ? 0 : 1.0f;
         Cursor.lockState = hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
+        _isInputLocked = hasOpened;
     }
 
     void OnDialogueToggled(bool hasOpened)
     {
-        if (hasOpened)
-        {
-            _inputHandler.OnMoveInput -= OnMoveInput;
-            _inputHandler.OnAttackInput -= _hero.Attack;
-        }
-        else
-        {
-            _inputHandler.OnMoveInput += OnMoveInput;
-            _inputHandler.OnAttackInput += _hero.Attack;
-        }
         Cursor.lockState = hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
+        _isInputLocked = hasOpened;
     }
+
 
     /// <summary>
     /// 입력 방향을 받아 Vector3로 변환한 후 Hero에게 이동 명령을 내리는 함수
@@ -80,6 +75,8 @@ public class PlayScene : MonoBehaviour
     /// <param name="inputVec"></param>
     void OnMoveInput(Vector2 inputVec)
     {
+        if (_isInputLocked == true) return;
+
         // 카메라 앞쪽 방향
         Vector3 camForward = Camera.main.transform.forward;
 
@@ -101,5 +98,19 @@ public class PlayScene : MonoBehaviour
         //_hero.Move(direction);
         
         _hero.Move(direction);
+    }
+
+    void OnJumpInput()
+    {
+        if(_isInputLocked == true) return;
+
+        _hero.Jump();
+    }
+
+    void OnAttackInput()
+    {
+        if(_isInputLocked == true) return;
+
+        _hero.Attack();
     }
 }
