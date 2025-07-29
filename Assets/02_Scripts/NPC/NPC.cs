@@ -6,73 +6,31 @@ using UnityEngine.UI;
 
 public class NPC : MonoBehaviour
 {
-    FlagSystem _flagSystem;
-
-    [Header("---- 설정 데이터 ----")]
-    [SerializeField] DialogueConfig[] _configs;             // 대화 설정 데이터 배열
-    [SerializeField] LayerMask _playerLayerMask;
-    [SerializeField] Image _interactImage;
-
-    List<DialogueConfig> _sortedConfigs;                    // 우선순위 내림차순으로 정렬된 대화 설정 데이터 리스트
-
-    private void Awake()
-    {
-        // OrderByDescending : 내림차순 정렬
-        // _configs에 들어있는 config를 config.Priority 내림차순으로 정렬
-        _sortedConfigs = _configs.OrderByDescending(config => config.Priority).ToList();
-    }
+    [Header("---- ������Ʈ ���� ----")]
+    [SerializeField] DialogueInteract _interact;
+    [SerializeField] PathFollower _pathFollower;
 
     private void Start()
     {
-        _flagSystem = FindAnyObjectByType<FlagSystem>();
+        _interact.OnBegun += OnInteractionBegun;
+        _interact.OnEnded += OnInteractionEnded;
+
+        _pathFollower.StartFollowing();
     }
 
     /// <summary>
-    /// 상호작용을 실행하는 함수
+    /// ��ȣ�ۿ� ���� �� �ڵ����� ȣ��Ǵ� �Լ�
     /// </summary>
-    public void Interact()
+    void OnInteractionBegun()
     {
-        foreach (var config in _sortedConfigs)
-        {
-            // 필요한 플래그 조건 통과 여부
-            // 1) 대화 설정 데이터 자체가 필요 플래그가 없는 경우이거나
-            // 2) 대화 설정 데이터의 필요 플래그가 켜져있는 경우
-            bool requiredPassed = string.IsNullOrEmpty(config.RequireFlag) || 
-                _flagSystem.ContainsFlag(config.RequireFlag);
-
-            // 없어야 하는 플래그 조건 통과 여부
-            // 1) 대화 설정 데이터 자체가 숨김 플래그가 없는 경우이거나
-            // 2) 대화 설정 데이터의 숨김 플래그가 꺼져있는 경우
-            bool hiddenPassed = string.IsNullOrEmpty(config.HiddenFlag) ||
-                (_flagSystem.ContainsFlag(config.HiddenFlag) == false);
-
-            if(requiredPassed && hiddenPassed)
-            {
-                // DialogueModel 생성
-                DialogueModel model = new DialogueModel(config);
-                
-                // 대화 재생 이벤트 발행
-                EventBus.PlayDialogue(model);
-                return;
-            }
-        }
+        _pathFollower.StopFollowing();
     }
 
-    void PlayerScan()
+    /// <summary>
+    /// ��ȣ�ۿ� ���� �� �ڵ����� ȣ��Ǵ� �Լ�
+    /// </summary>
+    void OnInteractionEnded()
     {
-        // 플레이어랑 NPC사이의 선 그려서 일정 거리 안에 있으면(RayCast)
-        
-
-        // InteractImage 키고, 대화 재생
-        
-    }
-
-    // 테스트용 치트키
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F11))
-        {
-            Interact();
-        }
+        _pathFollower.StartFollowing();
     }
 }

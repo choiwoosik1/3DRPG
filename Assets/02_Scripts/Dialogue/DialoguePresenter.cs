@@ -49,6 +49,7 @@ public class DialoguePresenter : MonoBehaviour
     public void Stop()
     {
         _view.gameObject.SetActive(false);
+        _model.InvokeEnded();
         OnEnded?.Invoke();
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,11 @@ public class DialogueModel
 {
     DialogueConfig _config;
     string[] _lines;
+
+    /// <summary>
+    /// 대화 종료 이벤트
+    /// </summary>
+    public event Action OnEnded;
 
     public DialogueModel(DialogueConfig config)
     {
@@ -27,5 +33,13 @@ public class DialogueModel
         if (index < 0 || index >= _lines.Length) return null;
 
         return _lines[index];
+    }
+
+    /// <summary>
+    /// 대화 종료 이벤트를 발행하는 함수
+    /// </summary>
+    public void InvokeEnded()
+    {
+        OnEnded?.Invoke();
     }
 }

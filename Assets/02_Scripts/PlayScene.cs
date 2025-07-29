@@ -53,6 +53,9 @@ public class PlayScene : MonoBehaviour
 
         // 대화창 여닫기 이벤트 구독
         _dialogueSystem.OnToggled += OnDialogueToggled;
+
+        // 상호작용 입력 이벤트 구독
+        _inputHandler.OnInteractionInput += OnInteractionInput;
     }
 
     void OnInventoryToggled(bool hasOpened)
@@ -112,5 +115,12 @@ public class PlayScene : MonoBehaviour
         if(_isInputLocked == true) return;
 
         _hero.Attack();
+    }
+
+    void OnInteractionInput()
+    {
+        if (_isInputLocked == true) return;
+
+        _hero.ExecuteInteraction();
     }
 }

@@ -10,13 +10,13 @@ public class DialogueConfig : ScriptableObject
 {
     [SerializeField] string _id;                        // 고유번호
     [SerializeField] int _priority;                     // 대화 우선 순위
-    [SerializeField] string _requireFlag;               // 필요한 플래그
+    [SerializeField] string _requiredFlag;               // 필요한 플래그
     [SerializeField] string _hiddenFlag;                // 없어야 하는 플래그
     [SerializeField][TextArea(5, 10)] string _content;  // 대사 내용
 
     public string Id => _id;
     public int Priority => _priority;
-    public string RequireFlag => _requireFlag;
+    public string RequiredFlag => _requiredFlag;
     public string HiddenFlag => _hiddenFlag;
     public string Content => _content;
 }

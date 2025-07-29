@@ -18,6 +18,7 @@ public class Hero : MonoBehaviour
     [SerializeField] HeroStatusView _statusView;
     [SerializeField] EquipController _equipController;
     [SerializeField] Transform _basicHitPoint;
+    [SerializeField] InteractableDetector _interactableDetector;    // 상호작용자 감지자
 
     private void Start()
     {
@@ -47,6 +48,12 @@ public class Hero : MonoBehaviour
 
         // 무기 장착 이벤트 구독
         _equipController.OnWeaponEquipped += OnWeaponEquipped;
+
+        // 상호작용자 감지 이벤트 구독
+        _interactableDetector.OnDetected += OnInteractableDetected;
+
+        // 상호작용자 감지 실패 이벤트 구독
+        _interactableDetector.OnMissed += OnInteractableMissed;
     }
 
 
@@ -144,5 +151,30 @@ public class Hero : MonoBehaviour
         {
             _damageableDetector.SetDetectPoint(hitPoint);
         }
+    }
+
+    /// <summary>
+    /// IInteractable을 감지했을 때 자동으로 호출되는 함수
+    /// </summary>
+    /// <param name="interactable"></param>
+    void OnInteractableDetected(IInteractable interactable)
+    {
+        _statusView.SetInteractionGuide(true, interactable.GuidePoint);
+    }
+
+    /// <summary>
+    /// IInteractable 감지를 실패했을 때 자동으로 호출되는 함수
+    /// </summary>
+    void OnInteractableMissed()
+    {
+        _statusView.SetInteractionGuide(false, Vector3.zero);
+    }
+
+    /// <summary>
+    /// 상호작용을 수행하는 함수
+    /// </summary>
+    public void ExecuteInteraction()
+    {
+        _interactableDetector.ExecuteInteraction();
     }
 }

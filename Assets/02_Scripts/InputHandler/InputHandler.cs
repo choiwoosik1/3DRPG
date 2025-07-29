@@ -43,4 +43,9 @@ public abstract class InputHandler : MonoBehaviour
     /// 인벤토리 메뉴 여닫기 입력 이벤트
     /// </summary>
     public abstract event Action OnInventoryInput;
+
+    /// <summary>
+    /// 상호작용 입력 이벤트
+    /// </summary>
+    public abstract event Action OnInteractionInput;
 }
