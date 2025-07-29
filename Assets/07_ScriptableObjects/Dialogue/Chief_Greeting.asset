@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: Chief_Greeting
   _priority: 0
-  _requireFlag: 
+  _requiredFlag: 
   _hiddenFlag: 
   _content: "\uC774\uB984#\uCD0C\uC7A5\n\uC548\uB155\uD558\uC138\uC694 \uC800\uB294
     \uC774\uACF3\uC758 \uCD0C\uC7A5\uC785\uB2C8\uB2E4.\n\uD50C\uB798\uADF8\uC628#Chief_Quest0"

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: Chief_Quest1
   _priority: 1
-  _requireFlag: Chief_Quest0
+  _requiredFlag: 
   _hiddenFlag: 
   _content: "\uC774\uB984#\uCD0C\uC7A5\n\uB2F9\uC2E0\uC740 \uBAA8\uD5D8\uAC00\uC778\uAC00\uC694?\n\uC694\uC998
     \uB9C8\uC744 \uADFC\uAD50\uC5D0 \uB291\uB300\uB4E4\uC774 \uC124\uCCD0\uC11C \uACE8\uCE58\uC785\uB2C8\uB2E4.\n\uB2F9\uC2E0\uC774\uB77C\uBA74
