@@ -69,6 +69,7 @@ public class PlayScene : MonoBehaviour
     {
         Cursor.lockState = hasOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
         _isInputLocked = hasOpened;
+        _hero.Move(Vector3.zero);
     }
 
 

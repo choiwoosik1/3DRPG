@@ -24,7 +24,7 @@ public class DialogueInteract : MonoBehaviour, IInteractable
     /// <summary>
     /// 상호작용 시작 이벤트
     /// </summary>
-    public event Action OnBegun;
+    public event Action<Transform> OnBegun;
 
     /// <summary>
     /// 상호작용 종료 이벤트
@@ -47,7 +47,7 @@ public class DialogueInteract : MonoBehaviour, IInteractable
     /// <summary>
     /// 상호작용을 실행하는 함수
     /// </summary>
-    public void Interact()
+    public void Interact(Transform subject)
     {
         foreach (var config in _sortedConfigs)
         {
@@ -70,7 +70,7 @@ public class DialogueInteract : MonoBehaviour, IInteractable
 
                 _currentDialogue.OnEnded += OnDialogueEnded;
 
-                OnBegun?.Invoke();
+                OnBegun?.Invoke(subject);
 
                 // 대화 재생 이벤트 발행
                 EventBus.PlayDialogue(_currentDialogue);
@@ -94,7 +94,7 @@ public class DialogueInteract : MonoBehaviour, IInteractable
     {
         if (Input.GetKeyDown(KeyCode.F11))
         {
-            Interact();
+            Interact(transform);
         }
     }
 }

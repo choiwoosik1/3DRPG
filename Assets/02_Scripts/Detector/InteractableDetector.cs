@@ -74,7 +74,7 @@ public class InteractableDetector : MonoBehaviour
     {
         if (_detectedInteractable == null) return;
 
-        _detectedInteractable.Interact();
+        _detectedInteractable.Interact(transform);
     }
 }
 
