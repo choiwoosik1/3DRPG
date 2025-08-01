@@ -9962,8 +9962,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa4452051f23d34d9ea52c78723d091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _directionLight: {fileID: 705507996}
-  _rotate: 20
+  _timeMultiplier: 3600
+  _initialTime: 0.5
 --- !u!1001 &711896168
 PrefabInstance:
   m_ObjectHideFlags: 0

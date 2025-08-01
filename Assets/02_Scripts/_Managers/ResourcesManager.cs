@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+// LoadResources라는 함수를 만들어
 
 /// <summary>
 /// Unity Resources를 활용하여 게임의 Resource를 관리하는 매니저
@@ -8,6 +11,9 @@ using UnityEngine;
 public class ResourcesManager : MonoBehaviour
 {
     Dictionary<string, GameObject> _prefabCache = new();
+
+    // type -> 유니티에서 지원하는 모든 에셋에 대해 적용 가능하도록
+    Dictionary<Type, Dictionary<string, UnityEngine.Object>> _resourceCache = new();
 
     /// <summary>
     /// 지정 경로의 prefab을 로드해 반환하는 함수
@@ -35,4 +41,15 @@ public class ResourcesManager : MonoBehaviour
         
         return prefab;
     }
+
+    /// <summary>
+    /// Resource를 Load합니다. 이미 캐시에 있다면 캐시에서 반환합니다.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    //public T LoadResource<T>(string path) where T : UnityEngine.Object
+    //{
+    //    _resourceCache[typeof(T)]
+    //}
 }
