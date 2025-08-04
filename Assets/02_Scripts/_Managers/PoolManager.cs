@@ -31,7 +31,7 @@ public class PoolManager : MonoBehaviour
         if (_poolMap.ContainsKey(prefabPath) == false)
         {
             // ResourcesManager에서 Prefab Resources를 로드
-            GameObject prefab = _resourcesManager.LoadPrefab(
+            GameObject prefab = _resourcesManager.LoadResource<GameObject>(
                 string.Format(_prefabPathForamt, prefabPath));
 
             // Prefab Load에 실패한 경우

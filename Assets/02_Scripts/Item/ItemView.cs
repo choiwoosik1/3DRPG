@@ -14,13 +14,21 @@ public class ItemView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     Inventory _inventory;
     int _slotIndex;
     InventoryPresenter _presenter;
-
+    
     ItemModel _model;
-    [SerializeField] Image _iconImage;
+    Image _iconImage;
+
+    private void Awake()
+    {
+        _iconImage = gameObject.FindChild<Image>("Icon", true);
+    }
+
     public void Initialize(InventoryPresenter presenter, int slotIndex)
     {
         _presenter = presenter;
         _slotIndex = slotIndex;
+
+        _iconImage = gameObject.FindChild<Image>("Icon", true);
     }
 
     /// <summary>

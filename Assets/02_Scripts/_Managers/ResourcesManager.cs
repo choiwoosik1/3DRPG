@@ -48,8 +48,31 @@ public class ResourcesManager : MonoBehaviour
     /// <typeparam name="T"></typeparam>
     /// <param name="path"></param>
     /// <returns></returns>
-    //public T LoadResource<T>(string path) where T : UnityEngine.Object
-    //{
-    //    _resourceCache[typeof(T)]
-    //}
+    public T LoadResource<T>(string path) where T : UnityEngine.Object
+    {
+        // 타임별 캐시 확인
+        if(_resourceCache.TryGetValue(typeof(T), out var cache))
+        {
+            cache = new Dictionary<string, UnityEngine.Object>();
+            _resourceCache[typeof(T)] = cache;
+        }
+
+        // 경로(폴더 경로 포함한 이름)에 따른 캐시 확인
+        if(cache.ContainsKey(path) == true)
+        {
+            return cache[path] as T;
+        }
+
+        // Resources 폴더에서 Resource 로드
+        T resource = Resources.Load<T>(path);
+        if(resource == null)
+        {
+            Debug.LogError($"{path}경로의 Resources 폴더에서 찾을 수 없습니다.");
+        }
+        else
+        {
+            cache[path] = resource;
+        }
+        return resource;
+    }
 }

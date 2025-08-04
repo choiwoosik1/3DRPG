@@ -53,3 +53,11 @@
 	Object Pooling
 		- 최적화 기법
 		- 자주 사용하는 오브젝트를 매번 생성/삭제 하지 않고 미리 생성해 놓고 활성화(Game Scene)/비활성화(Pool)	 하여 최적화를 추구하는 기법
+
+	Particle System
+		Emission : Rate over Time을 올리면 Particle이 더 많이 생김
+		Shape : 방출되는 모양을 바꿈 -> Particle의 모양을 바꾸는 것이 아님
+				- Mesh로 바꿔서 원하는 모양으로 나오게 할 수도 있음
+		Start Delay : Random Between Two Constants로 바꾸면 각 Particle의 속도를 다르게 설정할 수도 있음
+		Limit Velocity Over LifeTime : Particle들으 점점 천천히 / 빠르게 바꿀 수도 있음
+		Renderer : 

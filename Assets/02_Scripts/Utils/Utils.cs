@@ -139,6 +139,9 @@ public static class Utils
         return component;
     }
 
+    // InspectorView에서 컴포넌트 참조를 연결해주는 대신
+    // 코드에서 처리할 경우 사용 가능
+
     /// <summary>
     /// 주어진 GameObject의 자식 중에서 특정 이름을 가진 T 타입의 컴포넌트를 찾습니다
     /// 직계 자식 게임 오브젝트들만 탐색하거나, 재귀적으로 모든 하위 자식까지 탐색할 수 있습니다.
@@ -148,26 +151,79 @@ public static class Utils
     /// <param name="name">찾으려는 자식의 이름 (null일 경우 이름과 상관없이 찾음)</param>
     /// <param name="recursive">true일 경우 재귀적으로 모든 하위 자식까지 탐색, false일 경우 직계 자식들만 탐색</param>
     /// <returns></returns>
-    //public static T FindChild<T>(GameObject target, string name = null, bool recursive = false) where T : Component
-    //{
-    //    if (recursive)
-    //    {
-    //        T[] childs = target.GetComponentsInChildren<T>();
+    public static T FindChild<T>(GameObject target, string name = null, bool recursive = false) where T : Object
+    {
+        if (target == null)
+        {
+            Debug.LogError($"대상 게임 오브젝트가 null이므로 자식 컴포넌트를 찾을 수 없음");
+            return null;
+        }
 
-    //        foreach(T child in childs)
-    //        {
-    //            if(child.gameObject.name == name)
-    //            {
-    //                return child;
-    //            }
+        // 모든 게임 오브젝트 중에서 찾으려는 경우
+        if (recursive)
+        {
+            // 모든 T타입 자식 Components 찾기
+            // ()안에 true이면 켜져있는 오브젝트 false이면 꺼져있는 오브젝트도
+            T[] components = target.GetComponentsInChildren<T>(true);
 
-    //        }
-    //    }
-    //    else
-    //    {
+            foreach(T child in components)
+            {
+                if(string.IsNullOrEmpty(name) || child.name == name)
+                {
+                    return child;
+                }
+            }
+        }
 
-    //    }
+        // 직계 자식 게임 오브젝트 중에서 찾으려는 경우
+        else
+        {
+            Transform transform = target.transform;
 
+            for(int i = 0; i < transform.childCount; i++)
+            {
+                // i번째 child 가져오기
+                Transform child = transform.GetChild(i);
 
-    //}
+                if(string.IsNullOrEmpty (name) || child.name == name)
+                {
+                    T component = child.GetComponent<T>();
+                    if (component != null)
+                    {
+                        return component;
+                    }
+                }
+            }
+        }
+
+        if (string.IsNullOrEmpty(name) == true)
+        {
+            Debug.LogError($"{typeof(T).Name}형식인 컴포넌트를 {target.name}에서 찾을 수 없습니다.");
+
+        }
+        else
+        {
+            Debug.LogError($"{typeof(T).Name}형식이고 이름이 {name}인 컴포넌트를 {target.name}에서 찾을 수 없습니다");
+        }
+
+        return null;
+    }
 }
+
+//if (recursive)
+//{
+//    T[] childs = target.GetComponentsInChildren<T>();
+
+//    foreach (T child in childs)
+//    {
+//        if (child.gameObject.name == name)
+//        {
+//            return child;
+//        }
+
+//    }
+//}
+//else
+//{
+
+//}

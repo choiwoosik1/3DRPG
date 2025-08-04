@@ -173,8 +173,8 @@ public class InventoryPresenter : MonoBehaviour
         if (itemModel == null) return;
 
         _selectedItemModel = itemModel;
-        _dragView.SetItemModel(_selectedItemModel);
         _dragView.gameObject.SetActive(true);
+        _dragView.SetItemModel(_selectedItemModel);
     }
 
     public void Dragging(Vector2 pos)
