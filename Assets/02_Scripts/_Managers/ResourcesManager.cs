@@ -51,7 +51,7 @@ public class ResourcesManager : MonoBehaviour
     public T LoadResource<T>(string path) where T : UnityEngine.Object
     {
         // 타임별 캐시 확인
-        if(_resourceCache.TryGetValue(typeof(T), out var cache))
+        if(_resourceCache.TryGetValue(typeof(T), out var cache) == false)
         {
             cache = new Dictionary<string, UnityEngine.Object>();
             _resourceCache[typeof(T)] = cache;
