@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 객체를 Json 형식으로 변환하기 위한 필수 요소(JsonUtility)
+// 1) 클래스가 [System.Serializable]로 설정되어 있어야 한다
+// 2) Json 직렬화/역직렬화를 할 Field들은 [SerializeField]거나 public이어야 한다. - 일반 C# 클래스여야 가능할 것임(Monobehavior X)
+
 /// <summary>
 /// 주인공 캐릭터 정보를 저장하는 데이터 클래스
 /// 이름, 스탯 etc.
@@ -11,7 +15,15 @@ using UnityEngine;
 public class HeroData
 {
     [SerializeField] string _heroName = "Hero";
+    [SerializeField] int _level = 0;
+    [SerializeField] float _exp = 0.0f;
+    [SerializeField] int _gold = 1700;
+    [SerializeField] Vector3 _position = Vector3.zero;
     public string HeroName => _heroName;
+    public int Level => _level;
+    public float Exp => _exp;
+    public int gold => _gold;
+    public Vector3 Position => _position;
     
     /// <summary>
     /// 주인공 캐릭터 이름을 변경하는 함수

@@ -16,9 +16,10 @@ public class Hero : MonoBehaviour
     [SerializeField] CharacterAnimatorHandler _animatorHandler;
     [SerializeField] DamageableDetector _damageableDetector;
     [SerializeField] HeroStatusView _statusView;
-    [SerializeField] EquipController _equipController;
-    [SerializeField] Transform _basicHitPoint;
+    [SerializeField] EquipController _equipController;              // 장비 장착 컨트롤러
+    [SerializeField] Transform _basicHitPoint;                      // 기본 타점
     [SerializeField] InteractableDetector _interactableDetector;    // 상호작용자 감지자
+    [SerializeField] EffectSpawner _effectSpawner;                  // 이펙트 생성자
 
     private void Start()
     {
@@ -96,6 +97,8 @@ public class Hero : MonoBehaviour
     void Hit(IDamageable damageable)
     {
         _model.Hit(damageable);
+
+        _effectSpawner.SpawnEffect(EffectType.HitEffect, _damageableDetector.HitPoint.position);
     }
 
     /// <summary>

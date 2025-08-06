@@ -85,4 +85,30 @@ public class GameManager : MonoBehaviour
 
         _poolManager.Initialize(_resourcesManager);
     }
+
+
+    // ---- 임시 세이브 로드 ---- //
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            Save();
+        }
+    }
+
+    public void Save()
+    {
+        string json = JsonUtility.ToJson(_heroData);
+        Debug.Log(json);
+        PlayerPrefs.SetString("HeroData", json);
+    }
+
+    public void Load()
+    {
+        string json = PlayerPrefs.GetString("HeroData", string.Empty);
+        _heroData = JsonUtility.FromJson<HeroData>(json);
+    }
+
+    // ---- 임시 세이브 로드 ---- //
 }

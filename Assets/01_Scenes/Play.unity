@@ -4010,6 +4010,7 @@ GameObject:
   - component: {fileID: 281495841}
   - component: {fileID: 281495842}
   - component: {fileID: 281495843}
+  - component: {fileID: 281495844}
   m_Layer: 6
   m_Name: Hero
   m_TagString: Untagged
@@ -4059,6 +4060,7 @@ MonoBehaviour:
   _equipController: {fileID: 1876793726}
   _basicHitPoint: {fileID: 1373906905}
   _interactableDetector: {fileID: 281495843}
+  _effectSpawner: {fileID: 281495844}
 --- !u!114 &281495837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4172,6 +4174,18 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 512
+--- !u!114 &281495844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281495834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 422ceda13bf75fd4e8a9925c2a47b998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &293132142 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 409632, guid: 471c1eb32c770a54ea8a1c3ffbda1de6, type: 3}
@@ -23872,8 +23886,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 422ceda13bf75fd4e8a9925c2a47b998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitEffectPrefab: {fileID: 0}
-  _effectPrefabPath: Effect/HitEffect
 --- !u!4 &1462483538 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 409632, guid: 471c1eb32c770a54ea8a1c3ffbda1de6, type: 3}

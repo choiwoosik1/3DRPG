@@ -13,6 +13,8 @@ public class DamageableDetector : MonoBehaviour
     [SerializeField] float _radius;                     // 구성 감지 범위의 반지름
     [SerializeField] LayerMask _targetLayerMask;        // 감지할 LayerMask
 
+    public Transform HitPoint => _detectPoint;          // 타점
+
     /// <summary>
     /// IDamageable 감지 이벤트
     /// </summary>
